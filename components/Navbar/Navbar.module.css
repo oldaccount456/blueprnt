@@ -1,0 +1,158 @@
+@font-face {     
+    font-family: 'ElectronicArtsDisplay';     
+    src: url('/fonts/ElectronicArtsDisplay-Regular.woff2') format('woff');     
+    font-weight: 400;     
+    font-style: normal;   
+  }     
+
+  @font-face {     
+    font-family: 'ElectronicArtsDisplay Bold';     
+    src: url('/fonts/ElectronicArtsDisplay-Bold.woff2') format('woff');     
+    font-weight: 600;     
+    font-style: normal;   
+  }   
+  @font-face {     
+    font-family: 'ElectronicArtsText';     
+    src: url('/fonts/ElectronicArtsText-Light.woff2') format('woff');     
+    font-weight: 300;     
+    font-style: normal;   
+  }   
+  @font-face {     
+    font-family: 'ElectronicArtsText';     
+    src: url('/fonts/ElectronicArtsText-LightItalic.woff2') format('woff');     
+    font-weight: 300;     
+    font-style: italic;   
+  }   
+  
+  @font-face {     
+    font-family: 'ElectronicArtsText';     
+    src: url('/fonts/ElectronicArtsText-Regular.woff2') format('woff');     
+    font-weight: 400;     
+    font-style: normal;   
+  }   
+  
+  @font-face {     
+    font-family: 'ElectronicArtsText';     
+    src: url('/fonts/ElectronicArtsText-Italic.woff2') format('woff');     
+    font-weight: 400;     
+    font-style: italic;   
+  }   
+  @font-face {     
+    font-family: 'ElectronicArtsText';     
+    src: url('/fonts/ElectronicArtsText-Bold.woff2') format('woff');     
+    font-weight: 600;     
+    font-style: normal;   
+  }   
+  @font-face {     
+    font-family: 'ElectronicArtsText';     
+    src: url('/fonts/ElectronicArtsText-BoldItalic.woff2') format('woff');     
+    font-weight: 600;     
+    font-style: italic;   
+  } 
+#navbar{
+
+
+  background-color:rgba(0, 0, 0, 0.2)!important;
+
+
+}
+
+#profile{
+   display:flex;
+   margin-top:8px;
+   margin-left:10px;
+}
+#nav-dropdown{
+  color:white;
+    margin-top:2px;
+    font-weight: normal;
+    font-family: 'ElectronicArtsDisplay Bold';
+    letter-spacing:1px;
+
+}
+
+#avatar-circle {
+    margin-top:7px;
+    user-select: none;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    font-size: 15px;
+    color: #fff;
+    text-align: center;
+    background: #77A7FF;
+}
+
+
+.nav-link{
+    margin-left:10px;
+    font-family: 'ElectronicArtsDisplay Bold';
+    font-size: 16px;
+    letter-spacing:1px;
+    color:white;
+}
+
+.nav-dropdown-link{
+  margin-left:10px;
+  font-family: 'ElectronicArtsDisplay Bold';
+  font-size: 16px;
+  letter-spacing:1px;
+  color:black;
+}
+.nav-link:hover{
+  background-color: transparent;
+  color:white;
+}
+.nav-dropdown-link:hover{
+  background-color: transparent;
+  color:black;
+}
+
+#logo-footer{
+  font-family: 'ElectronicArtsDisplay';
+  letter-spacing:1px;
+  color:white;
+  font-size: 10px;
+  font-weight:700;
+  margin-top:-10px;
+  margin-left:40px;
+
+}
+
+#navbar-brand{
+    margin-top:10px;
+    margin-left:20px;
+}
+
+#nav-options{
+    margin-right:20px;
+}
+
+.upload-btn:hover{
+    color:white;
+}
+
+.upload-btn:active:focus{
+  box-shadow:none!important;
+}
+
+.upload-btn{
+  box-shadow: 0px 3px #314470;
+    border:none!important;
+    background: rgb(73,95,167);
+    background: linear-gradient(180deg, rgba(73,95,167,1) 2%, rgba(45,179,211,1) 99%);
+    font-family: 'ElectronicArtsDisplay Bold';
+    letter-spacing:1px;
+    width:108.9px;
+    color:white;
+    border-radius:4px;
+    text-shadow: 1.2px 1.2px #436EAF;
+    height:42.35px!important;
+    margin-top:1px;
+    
+}
+
+.nav-text{
+    margin-top:9px;
+}

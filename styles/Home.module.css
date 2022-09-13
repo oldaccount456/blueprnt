@@ -1,0 +1,21 @@
+@font-face {     
+    font-family: 'ElectronicArtsDisplay Bold';     
+    src: url('/fonts/ElectronicArtsDisplay-Bold.woff2') format('woff');     
+    font-weight: 600;     
+    font-style: normal;   
+}   
+
+#title-style{
+    color:white;
+    font-size:30px;
+    font-family: 'ElectronicArtsDisplay Bold';
+    letter-spacing:1px;
+    margin-top:100px;
+    margin-bottom:20px;
+}
+
+#landing-area{
+    height:250px;
+    width: 800px;
+    display:inline-block;
+}

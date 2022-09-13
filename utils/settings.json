@@ -1,0 +1,4 @@
+{
+    "allowedExts":[".jpg", ".jpeg", ".png", ".mp4", ".mp3", ".gif"],
+    "allowedMimetypes": ["image/jpeg", "image/png", "video/mp4", "audio/mpeg", "image/gif"]
+}
