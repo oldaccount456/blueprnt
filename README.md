@@ -1,4 +1,4 @@
-# BluePrnt
+# BluePrnt (WIP)
 
 
 ## Information
@@ -9,7 +9,7 @@
 
 - This project can be ran for free under Vercel and using Amazon's free tier for these services. They obviously come with limitations such as 5GB max storage on S3 buckets for example.  
 
-- This project is still a WIP and is in its very early stages. 
+- This project is still a WIP and is in its very early stages. There is a lot to add features wise as well as improve design wise and a lot of the current UI (such as the panel and loading animation) are just there as placeholders and aren't the final product. I'm only working on this project in my spare time. 
 
 ## Features
 
