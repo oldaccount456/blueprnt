@@ -7,7 +7,7 @@
 
 - Technologies involve using: AWS S3 buckets for storage, AWS RDS for hosting a relational database and AWS SES for sending out emails for I.e. account recovery.
 
-- This project can be ran for free under Vercel and using Amazon's free tier for these services. They obviously come with limitations such as 5GB max storage on S3 buckets for exmaple.  
+- This project can be ran for free under Vercel and using Amazon's free tier for these services. They obviously come with limitations such as 5GB max storage on S3 buckets for example.  
 
 - This project is still a WIP and is in its very early stages. 
 
