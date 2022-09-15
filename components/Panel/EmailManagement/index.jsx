@@ -65,7 +65,7 @@ export default class EmailManagement extends React.Component{
         };
         confirmNewEmailComponent.unhighlight();
 
-        if(newEmailComponent.state.email !== confirmNewEmailComponent.state.email){
+        if(newEmailComponent.state.value !== confirmNewEmailComponent.state.value){
             newEmailComponent.highlight();
             confirmNewEmailComponent.highlight();
             return this.handleErrorPopUp('Your emails do not match, please enter it correctly');

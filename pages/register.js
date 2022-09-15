@@ -211,7 +211,7 @@ export default class Register extends React.Component{
                                 <Form.Control ref={this.passwordConfirmField} value={this.state.passwordConfirm} onChange={this.updateField.bind(this)}  type="password"  placeholder="Confirm your password" />
                             </InputField>
                             <InputField id='email'>
-                                <EmailField ref={this.emailComponent} fieldName={'Email Address'}/>
+                                <EmailField ref={this.emailComponent} fieldName={'Email Address'} />
                             </InputField>
                             <InputField id='hcaptcha'>
                                 {parseBoolFromStr(process.env.NEXT_PUBLIC_USING_HCAPTCHA) ? (

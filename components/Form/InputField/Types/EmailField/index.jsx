@@ -3,35 +3,27 @@ import {
     Form
 } from 'react-bootstrap';
 
+import GeneralInputField from '@/components/Form/InputField/Types/GeneralInputField';
 import {validateEmail} from '@/utils/validator';
 
-export default class EmailField extends React.Component{
+export default class EmailField extends GeneralInputField{
     constructor(props){
         super(props);
 
-        this.state = {
-            email: '',
-        }
-        this.emailFormControlRef = React.createRef();
+        this.formControlRef = React.createRef();
     }
 
     validate(){
-        if(!this.state.email){
+        if(!this.state.value){
             return {
                 success: false,
                 message: 'You must enter an email address'
             };
         }
-        else if(!validateEmail(this.state.email)){
+        else if(!validateEmail(this.state.value)){
             return {
                 success: false,
-                message: 'You must enter a valid email address'
-            };
-        }
-        else if(this.state.email.length > 320){
-            return {
-                success: false,
-                message: 'Your email address cannot be over 320 characters long'
+                message: 'You must enter a valid email address (must be less than 320 characters and formatted correctly I.e. example@gmail.com)'
             };
         }
         return {
@@ -39,25 +31,11 @@ export default class EmailField extends React.Component{
         };
     }
     
-    highlight(){
-        this.emailFormControlRef.current.style.borderColor = 'red';
-    }
-
-    unhighlight(){
-        this.emailFormControlRef.current.style.borderColor = '';
-    }
-    
-    updateField(e){
-        this.setState({
-            email: e.target.value
-        })
-    }
-
     render(){
         return (
             <>
                 <Form.Label>{this.props.fieldName}</Form.Label>
-                <Form.Control ref={this.emailFormControlRef} value={this.state.email}  onChange={this.updateField.bind(this)} type="email" placeholder="Email Address" />
+                <Form.Control ref={this.formControlRef} value={this.state.value} onChange={this.updateField.bind(this)} type="email" placeholder="Email Address" />
             </>
         )
     }
