@@ -1,11 +1,11 @@
 import Layout from '@/components/Layout';
 import AccountPrompt from '@/components/Form/Prompt';
-import InputField from '@/components/Form/InputField'
+import InputField from '@/components/Form/InputField';
+import {EmailField} from '@/components/Form/InputField/Types';
 import SubmitButton from '@/components/Form/SubmitButton';
 import FormStatus from '@/components/Form/FormStatus';
 
 import parseBoolFromStr from '@/utils/envParser';
-import {validateEmail} from '@/utils/validator';
 
 import React from 'react';
 import Axios from 'axios';
@@ -16,6 +16,7 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 import {
     Form,
 } from 'react-bootstrap';
+
 
 export default class Register extends React.Component{
     constructor(props){
@@ -99,20 +100,10 @@ export default class Register extends React.Component{
 
         this.passwordField.current.style.borderColor = '';
         this.passwordConfirmField.current.style.borderColor = '';
+   
+        this.emailField.current.validate();
+        if(!this.emailField.current.state.validated) return;
 
-        if(!this.state.email){
-            this.emailField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp('You must enter an email address');
-        }
-        else if(!validateEmail(this.state.email)){
-            this.emailField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp('You must enter a valid email address');
-        }
-        else if(this.state.email.length > 100){
-            this.emailField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp('Your email address cannot be over 100 characters long');
-        }
-        this.emailField.current.style.borderColor = '';
         if(parseBoolFromStr(process.env.NEXT_PUBLIC_USING_HCAPTCHA)){
             if(!this.state.hcaptchaToken){
                 return this.handleErrorPopUp("Please fill out the captcha to verify you are not a bot")
@@ -186,11 +177,7 @@ export default class Register extends React.Component{
                     passwordConfirm: e.target.value
                 });
                 break;
-            case "email":
-                this.setState({
-                    email: e.target.value
-                });
-                break;
+
             default:
                 console.log('Unknown field given')
         }
@@ -198,7 +185,7 @@ export default class Register extends React.Component{
 
 
     render(){
-
+        
         return (
             <>
                 <Layout>
@@ -218,8 +205,7 @@ export default class Register extends React.Component{
                                 <Form.Control ref={this.passwordConfirmField} value={this.state.passwordConfirm} onChange={this.updateField.bind(this)}  type="password"  placeholder="Confirm your password" />
                             </InputField>
                             <InputField id='email'>
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control ref={this.emailField} value={this.state.email} onChange={this.updateField.bind(this)}  type="email"  placeholder="Email Address" />
+                                <EmailField ref={this.emailField} fieldName={'Email Address'} handleErrorPopUp={this.handleErrorPopUp.bind(this)}/>
                             </InputField>
                             <InputField id='hcaptcha'>
                                 {parseBoolFromStr(process.env.NEXT_PUBLIC_USING_HCAPTCHA) ? (
