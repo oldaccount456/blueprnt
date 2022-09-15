@@ -37,7 +37,7 @@ export default class Register extends React.Component{
         this.usernameField = React.createRef();
         this.passwordField = React.createRef();
         this.passwordConfirmField = React.createRef();
-        this.emailField = React.createRef();
+        this.emailComponent = React.createRef();
         this.captchaRef = React.createRef();
     }
 
@@ -101,8 +101,14 @@ export default class Register extends React.Component{
         this.passwordField.current.style.borderColor = '';
         this.passwordConfirmField.current.style.borderColor = '';
    
-        this.emailField.current.validate();
-        if(!this.emailField.current.state.validated) return;
+        const emailComponent = this.emailComponent.current;
+        const validateEmail = emailComponent.validate();
+        if(!validateEmail.success){
+            this.handleErrorPopUp(validateEmail.message);
+            return emailComponent.highlight();
+        }
+        emailComponent.unhighlight();
+
 
         if(parseBoolFromStr(process.env.NEXT_PUBLIC_USING_HCAPTCHA)){
             if(!this.state.hcaptchaToken){
@@ -205,7 +211,7 @@ export default class Register extends React.Component{
                                 <Form.Control ref={this.passwordConfirmField} value={this.state.passwordConfirm} onChange={this.updateField.bind(this)}  type="password"  placeholder="Confirm your password" />
                             </InputField>
                             <InputField id='email'>
-                                <EmailField ref={this.emailField} fieldName={'Email Address'} handleErrorPopUp={this.handleErrorPopUp.bind(this)}/>
+                                <EmailField ref={this.emailComponent} fieldName={'Email Address'}/>
                             </InputField>
                             <InputField id='hcaptcha'>
                                 {parseBoolFromStr(process.env.NEXT_PUBLIC_USING_HCAPTCHA) ? (
