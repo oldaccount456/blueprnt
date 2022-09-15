@@ -175,7 +175,7 @@ export default class PasswordManagement extends React.Component{
                         </Row>
                         <Row className='account-details-row-2'>
                             <Col>
-                                <Button onClick={this.updatePassword.bind(this)} className='panel-form-label' variant='primary'>Submit</Button>
+                                <Button onClick={this.updatePassword.bind(this)} className='panel-form-label' variant='primary'>Change Password</Button>
                             </Col>
                             <Col/>
                         </Row>
