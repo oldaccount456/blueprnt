@@ -2,6 +2,7 @@ import Layout from '@/components/Layout';
 import AccountPrompt from '@/components/Form/Prompt';
 import AccountDetails from '@/components/Panel/AccountDetails';
 import PasswordManagement from '@/components/Panel/PasswordManagement';
+import EmailManagement from '@/components/Panel/EmailManagement';
 import LoginActivity from '@/components/Panel/LoginActivity';
 
 import authenticateUser from '@/lib/authentication';
@@ -110,7 +111,7 @@ export default function Panel(props){
                                     <PasswordManagement/>
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="third">
-                                    <>Someth</>
+                                    <EmailManagement/>
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="fourth">
                                     <LoginActivity loginHistory={props.loginHistory}/>
