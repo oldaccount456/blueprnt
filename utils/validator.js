@@ -5,7 +5,7 @@ const validateStr = (value) => {
 }
 
 const validateEmail = (value) => {
-    return EMAIL_REGEX.test(value);
+    return EMAIL_REGEX.test(value) && value.length < 320;
 }
 
 module.exports = {
