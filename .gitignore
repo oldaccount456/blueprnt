@@ -1,0 +1,11 @@
+# External packages
+
+node_modules
+
+# Dist build
+
+.next
+
+# VSC WorkSpace file
+
+BluePrnt.code-workspace
