@@ -42,6 +42,16 @@ export default class EmailManagement extends React.Component{
         });
     }
 
+    
+    validateComponent(component){
+        const validateUsername = component.validate();
+        if(!validateUsername.success){
+            this.handleErrorPopUp(validateUsername.message);
+            return component.highlight();
+        }
+        component.unhighlight();
+    }
+
 
     async updateEmail(e){
         if(e){
@@ -50,27 +60,16 @@ export default class EmailManagement extends React.Component{
 
         const newEmailComponent = this.newEmailComponent.current;
         const confirmNewEmailComponent = this.confirmNewEmailComponent.current;
-
-        const validateNewEmail = newEmailComponent.validate();
-        if(!validateNewEmail.success){
-            this.handleErrorPopUp(validateNewEmail.message);
-            return newEmailComponent.highlight();
-        }
-        newEmailComponent.unhighlight();
-
-        const validateConfirmEmail = confirmNewEmailComponent.validate();
-        if(!validateConfirmEmail.success){
-            this.handleErrorPopUp(validateConfirmEmail.message);
-            return confirmNewEmailComponent.highlight();
-        };
-        confirmNewEmailComponent.unhighlight();
+        
+        this.validateComponent(newEmailComponent);
+        this.validateComponent(confirmNewEmailComponent);
 
         if(newEmailComponent.state.value !== confirmNewEmailComponent.state.value){
             newEmailComponent.highlight();
             confirmNewEmailComponent.highlight();
             return this.handleErrorPopUp('Your emails do not match, please enter it correctly');
         }
-    
+
         newEmailComponent.unhighlight();
         confirmNewEmailComponent.unhighlight();
 
@@ -81,8 +80,8 @@ export default class EmailManagement extends React.Component{
         try{
             const changeEmailReq = await Axios.post('/api/account/change-email', {
                 token: Cookies.get('token'),
-                newEmail: newEmailComponent.state.email,
-                newPassword: confirmNewEmailComponent.state.email,
+                newEmail: newEmailComponent.state.value,
+                newPassword: confirmNewEmailComponent.state.value,
             });
             this.setState({
                 processing: false,
