@@ -8,6 +8,7 @@ export default class GeneralInputField extends React.Component{
             value: '',
         }
     }
+    
     highlight(){
         this.formControlRef.current.style.borderColor = 'red';
     }
