@@ -98,7 +98,7 @@ export default class Register extends React.Component{
                 'username': usernameComponent.state.value,
                 'password': passwordComponent.state.value,
                 'email': emailComponent.state.value,
-                'hcaptchaToken': this.captchaComponent.current.state.hcaptchaToken,
+                'hcaptchaToken': captchaComponent.state.hcaptchaToken,
             });
             this.setState({
                 processing: false
@@ -114,7 +114,7 @@ export default class Register extends React.Component{
         }
         catch(err){
             console.log(err);
-            this.captchaComponent.current.resetCaptcha();
+            captchaComponent.resetCaptcha();
             let errorMessage = (!err.response.data.message || err.response.data.message == "") ?  "There was an error, please contact an admin for more." : err.response.data.message;
             if(Number(err.response.status) === 429){
                 errorMessage = err.response.data
