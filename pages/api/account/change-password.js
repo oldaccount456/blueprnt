@@ -1,37 +1,46 @@
 const bcrypt = require("bcryptjs");
 const {account} = require('@/lib/database');
-const {checkToken, createToken, destroyToken} = require('@/lib/authentication').default;
+const {checkToken, createToken, destroyToken} = require('@/lib/authentication');
 
 const botChecks = require('@/lib/botChecks').default;
-const {validateStr} = require('@/utils/validator');
+const {validateStr, validatePassword} = require('@/utils/validator');
 const getIp = require('@/utils/getIp').default;
 
 export default async function changePassword(req, res) {
     if(req.method === 'POST'){
         if(!validateStr(req.body.token)){
             return res.status(400).json({
-                message: 'You sent an invalid type of request, please provide a valid token',
+                message: 'You sent an invalid type of request, please provide a valid string for the token',
                 successful: false
             });
         }
-
+                
         if(!validateStr(req.body.oldPassword)){
             return res.status(400).json({
-                message: 'You sent an invalid type of request, please provide a valid old password',
+                message: 'You sent an invalid type of request, please provide a valid string for the old password',
                 successful: false
             });
-        }
+        }        
         
         if(!validateStr(req.body.newPassword)){
             return res.status(400).json({
-                message: 'You sent an invalid type of request, please provide a valid new password',
+                message: 'You sent an invalid type of request, please provide a valid string for the new password',
                 successful: false
             });
         }
 
-        if(req.body.newPassword.length < 5){
+        const isOldPasswordValidated = validatePassword(req.body.oldPassword, true);
+        if(!isOldPasswordValidated.success){
             return res.status(400).json({
-                message: 'You sent an invalid type of request, please provide a new password that is more than 5 characters',
+                message: `You sent an invalid type of request, ${isOldPasswordValidated.message}`,
+                successful: false
+            });
+        }
+
+        const isNewPasswordValidated = validatePassword(req.body.newPassword, true);
+        if(!isNewPasswordValidated.success){
+            return res.status(400).json({
+                message: `You sent an invalid type of request, ${isNewPasswordValidated.message}`,
                 successful: false
             });
         }
@@ -94,7 +103,7 @@ export default async function changePassword(req, res) {
         await destroyToken(userQuery);
         const ipAddress = getIp(req);
         const token = await createToken(userQuery, ipAddress);
-        
+
         return res.send(JSON.stringify({
             message: '',
             successful: true,

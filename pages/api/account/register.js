@@ -1,13 +1,14 @@
 const bcrypt = require("bcryptjs");
 const {account} = require('@/lib/database');
 const botChecks = require('@/lib/botChecks').default;
-
+const {createToken} = require('@/lib/authentication');
 const {
     validateStr, 
     validateUsername, 
     validatePassword, 
     validateEmail
 } = require('@/utils/validator');
+
 
 const getIp = require('@/utils/getIp').default;
 
