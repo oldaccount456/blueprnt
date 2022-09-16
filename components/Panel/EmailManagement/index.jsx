@@ -42,16 +42,17 @@ export default class EmailManagement extends React.Component{
         });
     }
 
-    
-    validateComponent(component){
+    validateComponent(component, handleHighlight=true){
         const validateUsername = component.validate();
         if(!validateUsername.success){
             this.handleErrorPopUp(validateUsername.message);
-            return component.highlight();
+            if(handleHighlight) component.highlight();
+            return false;
         }
-        component.unhighlight();
-    }
 
+        if(handleHighlight) component.unhighlight();
+        return true;
+    }
 
     async updateEmail(e){
         if(e){
@@ -61,13 +62,16 @@ export default class EmailManagement extends React.Component{
         const newEmailComponent = this.newEmailComponent.current;
         const confirmNewEmailComponent = this.confirmNewEmailComponent.current;
         
-        this.validateComponent(newEmailComponent);
-        this.validateComponent(confirmNewEmailComponent);
+        const newEmailValidation = this.validateComponent(newEmailComponent);
+        if(!newEmailValidation) return;
+                
+        const confirmNewEmailValidation = this.validateComponent(confirmNewEmailComponent);
+        if(!confirmNewEmailValidation) return;
 
         if(newEmailComponent.state.value !== confirmNewEmailComponent.state.value){
             newEmailComponent.highlight();
             confirmNewEmailComponent.highlight();
-            return this.handleErrorPopUp('Your emails do not match, please enter it correctly');
+            return this.handleErrorPopUp('Your emails do not match');
         }
 
         newEmailComponent.unhighlight();
@@ -81,7 +85,6 @@ export default class EmailManagement extends React.Component{
             const changeEmailReq = await Axios.post('/api/account/change-email', {
                 token: Cookies.get('token'),
                 newEmail: newEmailComponent.state.value,
-                newPassword: confirmNewEmailComponent.state.value,
             });
             this.setState({
                 processing: false,
@@ -105,27 +108,25 @@ export default class EmailManagement extends React.Component{
             <>
                 <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage}/>
                 <Container>
-                    
-                        <Row className='account-details-row-2'>
-                            <Col>
-                                <div className='panel-form-label'>
-                                    New Email
-                                </div>
-                                <EmailField ref={this.newEmailComponent} fieldName={''}/>
-                            </Col>
-                            <Col>
-                                <div className='panel-form-label'>
-                                    Confirm New Email
-                                </div>
-                                <EmailField ref={this.confirmNewEmailComponent} fieldName={''}/>
-                            </Col>
-                        </Row>
-                        <Row className='account-details-row-2'>
-                            <Col>
-                                <Button onClick={this.updateEmail.bind(this)} className='panel-form-label' variant='primary'>Change Email</Button>
-                            </Col>
-                            <Col/>
-                        </Row>
+                    <Row className='account-details-row-2'>
+                        <Col>
+                            <div className='panel-form-label'>
+                                New Email
+                            </div>
+                            <EmailField ref={this.newEmailComponent} fieldName={''}/>
+                        </Col>
+                        <Col>
+                            <div className='panel-form-label'>
+                                Confirm New Email
+                            </div>
+                            <EmailField ref={this.confirmNewEmailComponent} fieldName={''}/>
+                        </Col>
+                    </Row>
+                    <Row className='account-details-row-2'>
+                        <Col>
+                            <Button onClick={this.updateEmail.bind(this)} className='panel-form-label' variant='primary'>Change Email</Button>
+                        </Col>
+                    </Row>
                 </Container>
             </>
         )

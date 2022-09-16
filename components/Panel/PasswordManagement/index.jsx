@@ -2,10 +2,9 @@ import {
     Container,
     Row,
     Col,
-    Form,
     Button
 } from 'react-bootstrap';
-
+import {PasswordField} from '@/components/Form/InputField/Types';
 import FormStatus from '@/components/Form/FormStatus';
 import React from 'react';
 import Axios from 'axios';
@@ -16,18 +15,15 @@ export default class PasswordManagement extends React.Component{
         super(props);
 
         this.state = {
-            oldPassword: '',
-            newPassword: '',
-            confirmNewPassword: '',
             successMessage: '',
             errorMessage: '',
             processing: false,
         };
 
         
-        this.oldPasswordField = React.createRef();
-        this.newPasswordField = React.createRef();
-        this.confirmNewPasswordField = React.createRef();
+        this.oldPasswordComponent = React.createRef();
+        this.newPasswordComponent = React.createRef();
+        this.confirmNewPasswordComponent = React.createRef();
     }
 
     handleErrorPopUp(errorMessage){
@@ -45,57 +41,39 @@ export default class PasswordManagement extends React.Component{
         });
     }
 
-    updateField(e){
-        switch(e.target.id){
-            case "old-password":
-                this.setState({
-                    oldPassword: e.target.value
-                });
-                break;
-            case "new-password":
-                this.setState({
-                    newPassword: e.target.value
-                });
-                break;
-            case "confirm-new-password":
-                this.setState({
-                    confirmNewPassword: e.target.value
-                });
-                break;
+    validateComponent(component, handleHighlight=true){
+        const validateUsername = component.validate();
+        if(!validateUsername.success){
+            this.handleErrorPopUp(validateUsername.message);
+            if(handleHighlight) component.highlight();
+            return false;
         }
+
+        if(handleHighlight) component.unhighlight();
+        return true;
     }
-    async updatePassword(e){
-        if(e){
-            e.preventDefault();
-        }
 
-        if(!this.state.oldPassword){
-            this.oldPasswordField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp("Please enter your current password");
-        }
-        this.oldPasswordField.current.style.borderColor = '';
-        if(!this.state.newPassword){
-            this.newPasswordField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp("Please enter your new password");
-        }
-        if(this.state.newPassword.length < 5){
-            this.newPasswordField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp("Your new password has to be longer than 5 characters");
-        }
-        this.newPasswordField.current.style.borderColor = '';
-        if(!this.state.confirmNewPassword){
-            this.confirmNewPasswordField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp("Please confirm your new password");
-        }
-        this.confirmNewPasswordField.current.style.borderColor = '';
+    async updatePassword(){
+        const oldPasswordComponent = this.oldPasswordComponent.current;
+        const newPasswordComponent = this.newPasswordComponent.current;
+        const confirmNewPasswordComponent = this.confirmNewPasswordComponent.current;
 
-        if(this.state.newPassword !== this.state.confirmNewPassword){
-            this.newPasswordField.current.style.borderColor = 'red';
-            this.confirmNewPasswordField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp("Your new passwords do not match");
+        const oldPasswordValidation = this.validateComponent(oldPasswordComponent);
+        if(!oldPasswordValidation) return;
+
+        const newPasswordValidation = this.validateComponent(newPasswordComponent);
+        if(!newPasswordValidation) return;
+
+        const confirmNewPasswordValidation = this.validateComponent(confirmNewPasswordComponent);
+        if(!confirmNewPasswordValidation) return;
+
+        if(newPasswordComponent.state.value !== confirmNewPasswordComponent.state.value){
+            newPasswordComponent.highlight();
+            confirmNewPasswordComponent.highlight();
+            return this.handleErrorPopUp('Your new passwords must match');
         }
-        this.newPasswordField.current.style.borderColor = '';
-        this.confirmNewPasswordField.current.style.borderColor = '';
+        newPasswordComponent.unhighlight();
+        confirmNewPasswordComponent.unhighlight();   
 
         this.setState({
             processing: true
@@ -103,9 +81,9 @@ export default class PasswordManagement extends React.Component{
         
         try{
             const changePasswordReq = await Axios.post('/api/account/change-password', {
-                token: Cookies.get('token'),
-                oldPassword: this.state.oldPassword,
-                newPassword: this.state.newPassword,
+                'token': Cookies.get('token'),
+                'oldPassword': oldPasswordComponent.state.value,
+                'newPassword': newPasswordComponent.state.value,
             });
             this.setState({
                 processing: false,
@@ -130,56 +108,35 @@ export default class PasswordManagement extends React.Component{
            <>
                 <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage}/>
                 <Container>
-                    <Form onSubmit={this.updatePassword.bind(this)}>
-                        <Row>
-                            <Col>
+                    <Row>
+                        <Col>
                                 <div className='panel-form-label'>
                                     Old Password
                                 </div>
-                                <Form.Control
-                                    id='old-password'
-                                    type="password"
-                                    value={this.state.oldPassword}
-                                    onChange={this.updateField.bind(this)}
-                                    ref={this.oldPasswordField}
-                                />
+                                <PasswordField ref={this.oldPasswordComponent} fieldName={''} />
                             </Col>
-                            <Col/>
-                        </Row>
-            
-                        <Row className='account-details-row-2'>
-                            <Col>
-                                <div className='panel-form-label'>
-                                    New Password
-                                </div>
-                                <Form.Control
-                                    id='new-password'
-                                    type="password"
-                                    value={this.state.newPassword}
-                                    onChange={this.updateField.bind(this)}
-                                    ref={this.newPasswordField}
-                                />
-                            </Col>
-                            <Col>
-                                <div className='panel-form-label'>
-                                    Confirm New Password
-                                </div>
-                                <Form.Control
-                                    id='confirm-new-password'
-                                    type="password"
-                                    value={this.state.confirmNewPassword}
-                                    onChange={this.updateField.bind(this)}
-                                    ref={this.confirmNewPasswordField}
-                                />
-                            </Col>
-                        </Row>
-                        <Row className='account-details-row-2'>
-                            <Col>
-                                <Button onClick={this.updatePassword.bind(this)} className='panel-form-label' variant='primary'>Change Password</Button>
-                            </Col>
-                            <Col/>
-                        </Row>
-                    </Form>
+                        <Col/>
+                    </Row>
+                    <Row className='account-details-row-2'>
+                        <Col>
+                            <div className='panel-form-label'>
+                                New Password
+                            </div>
+                            <PasswordField ref={this.newPasswordComponent} fieldName={''} />
+                        </Col>
+                        <Col>
+                            <div className='panel-form-label'>
+                                Confirm New Password
+                            </div>
+                            <PasswordField ref={this.confirmNewPasswordComponent} fieldName={''} />
+                        </Col>
+                    </Row>
+                    <Row className='account-details-row-2'>
+                        <Col>
+                            <Button onClick={this.updatePassword.bind(this)} className='panel-form-label' variant='primary'>Change Password</Button>
+                        </Col>
+                        <Col/>
+                    </Row>
                 </Container>
             </>
         )
