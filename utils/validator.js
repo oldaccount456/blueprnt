@@ -4,11 +4,22 @@ const validateStr = (value) => {
     return typeof value === 'string';
 }
 
+const validateUsername = (value) => {
+    return value.length >= 2 && value.length <= 30;
+}
+
+const validatePassword = (value) => {
+    /* TODO: Implement more password security checks i.e. enforcing special chars in password */
+    return value.length > 5;
+}
+
 const validateEmail = (value) => {
     return EMAIL_REGEX.test(value) && value.length < 320;
 }
 
 module.exports = {
     validateStr,
+    validateUsername,
+    validatePassword,
     validateEmail,
 }
