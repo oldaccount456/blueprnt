@@ -5,16 +5,40 @@ const validateStr = (value) => {
 }
 
 const validateUsername = (value) => {
-    return value.length >= 2 && value.length <= 30;
+    if(value.length < 2 || value.length > 30){
+        return {
+            success: false,
+            message: 'You must enter a valid username (must be between 2-30 characters of length)'
+        };
+    }
+    return {
+        success: true
+    };
 }
 
 const validatePassword = (value) => {
     /* TODO: Implement more password security checks i.e. enforcing special chars in password */
-    return value.length > 5;
+    if(value.length < 5){
+        return {
+            success: false,
+            message: 'Your password must be more than 5 characters'
+        };
+    }
+    return {
+        success: true
+    };
 }
 
 const validateEmail = (value) => {
-    return EMAIL_REGEX.test(value) && value.length < 320;
+    if(!EMAIL_REGEX.test(value) || value.length > 320){
+        return {
+            success: false,
+            message: 'You must enter a valid email address (must be less than 320 characters and formatted correctly I.e. example@gmail.com)'
+        };
+    }
+    return {
+        success: true
+    };
 }
 
 module.exports = {

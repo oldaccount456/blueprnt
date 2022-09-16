@@ -20,15 +20,7 @@ export default class UsernameField extends GeneralInputField{
                 message: 'You must enter a username'
             };
         }
-        else if(!validateUsername(this.state.value)){
-            return {
-                success: false,
-                message: 'You must enter a valid username (must be between 2-30 characters of length)'
-            };
-        }
-        return {
-            success: true,
-        };
+        return validateUsername(this.state.value);
     }
     
     render(){

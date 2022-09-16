@@ -20,15 +20,7 @@ export default class PasswordField extends GeneralInputField{
                 message: 'You must enter a password'
             };
         }
-        else if(!validatePassword(this.state.value)){
-            return {
-                success: false,
-                message: 'Your password must be more than 5 characters'
-            };
-        }
-        return {
-            success: true,
-        };
+        return validatePassword(this.state.value);
     }
     
     render(){

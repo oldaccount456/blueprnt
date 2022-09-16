@@ -20,15 +20,7 @@ export default class EmailField extends GeneralInputField{
                 message: 'You must enter an email address'
             };
         }
-        else if(!validateEmail(this.state.value)){
-            return {
-                success: false,
-                message: 'You must enter a valid email address (must be less than 320 characters and formatted correctly I.e. example@gmail.com)'
-            };
-        }
-        return {
-            success: true,
-        };
+        return validateEmail(this.state.value);
     }
     
     render(){
