@@ -1,52 +1,59 @@
 const bcrypt = require("bcryptjs");
-const jwt = require('jsonwebtoken');
-
-const {account, currentJwt, loginHistory} = require('@/lib/database');
+const {account} = require('@/lib/database');
 const botChecks = require('@/lib/botChecks').default;
 
-const {validateStr, validateEmail} = require('@/utils/validator');
+const {
+    validateStr, 
+    validateUsername, 
+    validatePassword, 
+    validateEmail
+} = require('@/utils/validator');
+
 const getIp = require('@/utils/getIp').default;
 
-export default async function create(req, res) {
+export default async function register(req, res) {
     if(req.method === 'POST'){
         if(!validateStr(req.body.username)){
             return res.status(400).json({
-                message: 'You sent an invalid type of request, please provide a valid username',
+                message: 'You sent an invalid type of request, please provide a valid string for the username',
                 successful: false
             });
         }
-
-        if(req.body.username.length >= 30){
-            return res.status(400).json({
-                message: 'You sent an invalid type of request, your username cannot be 30 characters or over',
-                successful: false
-            });
-        }
-        
+                
         if(!validateStr(req.body.password)){
             return res.status(400).json({
-                message: 'You sent an invalid type of request, please provide a valid password',
+                message: 'You sent an invalid type of request, please provide a valid string for the password',
                 successful: false
             });
         }        
         
-        if(req.body.password.length < 5){
-            return res.status(400).json({
-                message: 'You sent an invalid type of request, please provide a password that is more than 5 characters',
-                successful: false
-            });
-        }
-
         if(!validateStr(req.body.email)){
             return res.status(400).json({
-                message: 'You sent an invalid type of request, please provide a valid email address',
+                message: 'You sent an invalid type of request, please provide a valid string for the email address',
                 successful: false
             });
         }
 
-        if(!validateEmail(req.body.email)){
+        const isUsernameValidated = validateUsername(req.body.username, true);
+        if(!isUsernameValidated.success){
             return res.status(400).json({
-                message: 'You sent an invalid type of request, please provide a valid email address',
+                message: `You sent an invalid type of request, ${isUsernameValidated.message}`,
+                successful: false
+            });
+        }
+
+        const isPasswordValidated = validatePassword(req.body.password, true);
+        if(!isPasswordValidated.success){
+            return res.status(400).json({
+                message: `You sent an invalid type of request, ${isPasswordValidated.message}`,
+                successful: false
+            });
+        }
+
+        const isEmailValidated = validateEmail(req.body.email, true);
+        if(!isEmailValidated.success){
+            return res.status(400).json({
+                message: `You sent an invalid type of request, ${isEmailValidated.message}`,
                 successful: false
             });
         }
@@ -94,19 +101,10 @@ export default async function create(req, res) {
             email: req.body.email,
         });
 
-        const token = jwt.sign({username: newAccount.username}, process.env.JWT_SECRET, {expiresIn: '24h'});
         const ipAddress = getIp(req);
+        const token = await createToken(newAccount, ipAddress);
         
-        await currentJwt.create({
-            id: null,
-            account_id: newAccount.id,
-            jwt_token: token
-        });
-        await loginHistory.create({
-            id: null,
-            account_id: newAccount.id,
-            ip_address: ipAddress
-        });
+
         return res.send(JSON.stringify({
             message: '',
             successful: true,
