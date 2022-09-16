@@ -1,8 +1,8 @@
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
-const {account, currentJwt, loginHistory} = require('@/lib/database');
+const {account} = require('@/lib/database');
 const botChecks = require('@/lib/botChecks').default;
+const {createToken} = require('@/lib/authentication');
 
 const {validateStr} = require('@/utils/validator');
 const getIp = require('@/utils/getIp').default;
@@ -68,19 +68,10 @@ export default async function login(req, res) {
                 successful: false
             });
         }
-        const token = jwt.sign({username: userQuery.username}, process.env.JWT_SECRET, {expiresIn: '24h'});
+
         const ipAddress = getIp(req);
-        
-        await currentJwt.create({
-            id: null,
-            account_id: userQuery.id,
-            jwt_token: token
-        });
-        await loginHistory.create({
-            id: null,
-            account_id: userQuery.id,
-            ip_address: ipAddress
-        });
+        const token = await createToken(userQuery, ipAddress);
+    
         return res.send(JSON.stringify({
             message: '',
             successful: true,

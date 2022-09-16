@@ -5,7 +5,7 @@ import PasswordManagement from '@/components/Panel/PasswordManagement';
 import EmailManagement from '@/components/Panel/EmailManagement';
 import LoginActivity from '@/components/Panel/LoginActivity';
 
-import authenticateUser from '@/lib/authentication';
+import {checkToken} from '@/lib/authentication';
 import {account, loginHistory} from '@/lib/database';
 
 import censorIp from '@/utils/censorIp';
@@ -29,7 +29,7 @@ export async function getServerSideProps({ req, res }){
         }
     }
     try{
-        const {username} = await authenticateUser(token);
+        const {username} = await checkToken(token);
         const accountQuery =  await account.findOne({
             include: [loginHistory],
             where: {

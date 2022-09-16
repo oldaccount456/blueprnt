@@ -2,7 +2,7 @@
 import FormStatus from '@/components/Form/FormStatus';
 import Layout from '@/components/Layout';
 
-import authenticateUser from '@/lib/authentication';
+import {checkToken} from '@/lib/authentication';
 import settings from '@/utils/settings.json';
 import styles from '@/styles/Home.module.css';
 
@@ -17,7 +17,7 @@ export async function getServerSideProps({ req, res }){
     const token = authHeader && authHeader.split('token=')[1];
     const getUser = async (token) => {
         try{
-            const {username} = await authenticateUser(token)
+            const {username} = await checkToken(token)
             return username;
         }
         catch(e){

@@ -1,11 +1,10 @@
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-
-const {account, blacklistedJwt, currentJwt} = require('@/lib/database');
-const authenticateUser = require('@/lib/authentication').default;
+const {account} = require('@/lib/database');
+const {checkToken, createToken, destroyToken} = require('@/lib/authentication').default;
 
 const botChecks = require('@/lib/botChecks').default;
 const {validateStr} = require('@/utils/validator');
+const getIp = require('@/utils/getIp').default;
 
 export default async function changePassword(req, res) {
     if(req.method === 'POST'){
@@ -39,7 +38,7 @@ export default async function changePassword(req, res) {
 
         const getUsername = async (token) => {
             try{
-                const {username} = await authenticateUser(token);
+                const {username} = await checkToken(token);
                 return username;
             }
             catch(e){
@@ -89,26 +88,12 @@ export default async function changePassword(req, res) {
             });
         }
 
-        const allCurrentJwt = await account.findOne({
-            include: [currentJwt],
-            where: {
-                id: userQuery.id
-            }
-        });
-
-        for(let jwt_obj of allCurrentJwt.current_jwts){
-            await blacklistedJwt.create({
-                id: null,
-                jwt_token: jwt_obj.jwt_token
-            });
-            await currentJwt.destroy({where: {
-                jwt_token: jwt_obj.jwt_token
-            }});
-        }
-
         const newPasswordHash = await bcrypt.hash(req.body.newPassword, 12);
         await account.update({ password: newPasswordHash }, { where: { id: userQuery.id }});
-        const token = jwt.sign({username: userQuery.username}, process.env.JWT_SECRET, {expiresIn: '24h'});
+
+        await destroyToken(userQuery);
+        const ipAddress = getIp(req);
+        const token = await createToken(userQuery, ipAddress);
         
         return res.send(JSON.stringify({
             message: '',

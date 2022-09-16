@@ -1,7 +1,7 @@
 import Layout from '@/components/Layout';
 import Gallery from '@/components/Gallery';
 
-import authenticateUser from '@/lib/authentication';
+import {checkToken} from '@/lib/authentication';
 import {storage, account, bucketObject} from '@/lib/database';
 
 export async function getServerSideProps({ req, res }){
@@ -16,7 +16,7 @@ export async function getServerSideProps({ req, res }){
         }
     }
     try{
-        const {username} = await authenticateUser(token);
+        const {username} = await checkToken(token);
         const user = await account.findOne({where: {
             username: username
         }});

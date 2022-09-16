@@ -2,7 +2,7 @@ import FileShowcaser from '@/components/FileShowcaser';
 import Layout from '@/components/Layout';
 
 import {storage, bucketObject} from '@/lib/database';
-import authenticateUser from '@/lib/authentication';
+import {checkToken} from '@/lib/authentication';
 
 import React from "react";
 import { withRouter } from 'next/router';
@@ -11,9 +11,9 @@ import Head from 'next/head';
 export async function getServerSideProps({ req, res, query }){
     const authHeader = req.headers['cookie']
     const token = authHeader && authHeader.split('token=')[1];
-    const checkToken = async (token) => {
+    const verifyToken = async (token) => {
         try{
-            const {username} = await authenticateUser(token)
+            const {username} = await checkToken(token)
             return username;
         }
         catch(e){
@@ -36,7 +36,7 @@ export async function getServerSideProps({ req, res, query }){
     }))
     return {
         props: {
-            user: token ? await checkToken(token) : false,
+            user: token ? await verifyToken(token) : false,
             bucketKeys: buckeyKeys
         }
     }

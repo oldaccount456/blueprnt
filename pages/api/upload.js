@@ -5,7 +5,7 @@ import aws from 'aws-sdk';
 import path from 'path';
 
 import {storage, account, bucketObject} from '@/lib/database';
-import authenticateUser from '@/lib/authentication';
+import {checkToken} from '@/lib/authentication';
 import settings from '@/utils/settings.json';
 import {validateStr} from '@/utils/validator';
 
@@ -91,7 +91,7 @@ const uploadOperation = multer({
         if(!uploadData[req.body.uploadReqId]){
             const getUploaderId = async (token) => {
                 try{
-                    const {username} = await authenticateUser(token);
+                    const {username} = await checkToken(token);
                     const accountQuery = await account.findOne({where: {
                         username: username
                     }});
