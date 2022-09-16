@@ -1,44 +1,34 @@
 import Layout from '@/components/Layout';
 import AccountPrompt from '@/components/Form/Prompt';
 import InputField from '@/components/Form/InputField';
-import {EmailField} from '@/components/Form/InputField/Types';
+import {UsernameField, PasswordField, EmailField, CaptchaField} from '@/components/Form/InputField/Types';
 import SubmitButton from '@/components/Form/SubmitButton';
 import FormStatus from '@/components/Form/FormStatus';
-
-import parseBoolFromStr from '@/utils/envParser';
 
 import React from 'react';
 import Axios from 'axios';
 
 import Cookies from 'js-cookie';
-import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 import {
     Form,
 } from 'react-bootstrap';
-
 
 export default class Register extends React.Component{
     constructor(props){
         super(props);
 
         this.state = {
-            username: '',
-            password: '',
-            passwordConfirm: '',
-            email: '',
-            hcaptchaToken: '',
-            hcaptchaSize: 'normal',
             successMessage: '',
             errorMessage: '',
             processing: false,
         }
 
-        this.usernameField = React.createRef();
-        this.passwordField = React.createRef();
-        this.passwordConfirmField = React.createRef();
+        this.usernameComponent = React.createRef();
+        this.passwordComponent = React.createRef();
+        this.confirmPasswordComponent = React.createRef();
         this.emailComponent = React.createRef();
-        this.captchaRef = React.createRef();
+        this.captchaComponent = React.createRef();
     }
 
     handleErrorPopUp(errorMessage){
@@ -56,76 +46,59 @@ export default class Register extends React.Component{
         });
     }
 
-    componentDidMount() {
-        if(window.innerWidth < 390){
-            this.setState({
-                hcaptchaSize: 'compact'
-            })
-        }   
+    validateComponent(component, handleHighlight=true){
+        const validateUsername = component.validate();
+        if(!validateUsername.success){
+            this.handleErrorPopUp(validateUsername.message);
+            if(handleHighlight) component.highlight();
+            return false;
+        }
+
+        if(handleHighlight) component.unhighlight();
+        return true;
     }
 
     async register(e){
         e.preventDefault();
-        if(!this.state.username){
-            this.usernameField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp('You must enter a username');
-        }
-        else if(this.state.username.length >= 30){
-            this.usernameField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp("Your username must be below 30 characters");
-        }
-        this.usernameField.current.style.borderColor = '';
+        const usernameComponent = this.usernameComponent.current;
+        const passwordComponent = this.passwordComponent.current;
+        const confirmPasswordComponent = this.confirmPasswordComponent.current;
+        const emailComponent = this.emailComponent.current;
+        const captchaComponent = this.captchaComponent.current;
 
-        if(!this.state.password){
-            this.passwordField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp('You must enter a password');
-        }
-        else if(this.state.password.length > 255){
-            this.passwordField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp('Your password must be below 255 characters');
-        }
-        this.passwordField.current.style.borderColor = '';
+        const usernameValidation = this.validateComponent(usernameComponent);
+        if(!usernameValidation) return;
 
-        if(!this.state.passwordConfirm){
-            this.passwordConfirmField.current.style.borderColor = 'red';
-            return this.handleErrorPopUp('You must confirm your password');
-        }
-        this.passwordConfirmField.current.style.borderColor = '';
+        const passwordValidation = this.validateComponent(passwordComponent);
+        if(!passwordValidation) return;
 
-        if(this.state.password !== this.state.passwordConfirm){
-            this.passwordField.current.style.borderColor = 'red';
-            this.passwordConfirmField.current.style.borderColor = 'red';
+        const confirmPasswordValidation = this.validateComponent(confirmPasswordComponent);
+        if(!confirmPasswordValidation) return;
+
+        if(passwordComponent.state.value !== confirmPasswordComponent.state.value){
+            passwordComponent.highlight();
+            confirmPasswordComponent.highlight();
             return this.handleErrorPopUp('Your passwords must match');
         }
+        passwordComponent.unhighlight();
+        confirmPasswordComponent.unhighlight();   
 
-        this.passwordField.current.style.borderColor = '';
-        this.passwordConfirmField.current.style.borderColor = '';
-   
-        const emailComponent = this.emailComponent.current;
-        const validateEmail = emailComponent.validate();
-        if(!validateEmail.success){
-            this.handleErrorPopUp(validateEmail.message);
-            return emailComponent.highlight();
-        }
-        emailComponent.unhighlight();
+        const emailValidation = this.validateComponent(emailComponent);
+        if(!emailValidation) return;
 
+        const captchaValidation = this.validateComponent(captchaComponent, false);
+        if(!captchaValidation) return;
 
-        if(parseBoolFromStr(process.env.NEXT_PUBLIC_USING_HCAPTCHA)){
-            if(!this.state.hcaptchaToken){
-                return this.handleErrorPopUp("Please fill out the captcha to verify you are not a bot")
-            }
-        }
-
-    
         this.setState({
             processing: true
         });
+
         try{
             const createReq = await Axios.post('/api/account/register', {
-                'username': this.state.username,
-                'password': this.state.password,
-                'email': this.state.email,
-                'hcaptchaToken': this.state.hcaptchaToken,
+                'username': usernameComponent.state.value,
+                'password': passwordComponent.state.value,
+                'email': emailComponent.state.value,
+                'hcaptchaToken': this.captchaComponent.current.state.hcaptchaToken,
             });
             this.setState({
                 processing: false
@@ -140,14 +113,8 @@ export default class Register extends React.Component{
             return window.location.href = '/panel';
         }
         catch(err){
-            console.log(err)
-            if(parseBoolFromStr(process.env.NEXT_PUBLIC_USING_HCAPTCHA)){
-                this.captchaRef.current.resetCaptcha();
-                this.setState({
-                    hcaptchaToken: ''
-                });
-            }
-
+            console.log(err);
+            this.captchaComponent.current.resetCaptcha();
             let errorMessage = (!err.response.data.message || err.response.data.message == "") ?  "There was an error, please contact an admin for more." : err.response.data.message;
             if(Number(err.response.status) === 429){
                 errorMessage = err.response.data
@@ -160,68 +127,28 @@ export default class Register extends React.Component{
 
     }
 
-    handleCaptcha(token, ekey){
-        this.setState({
-            hcaptchaToken: token
-        })
-    }
-
-    updateField(e){
-        switch(e.target.id){
-            case "username":
-                this.setState({
-                    username: e.target.value
-                });
-                break;
-            case "password":
-                this.setState({
-                    password: e.target.value
-                });
-                break;
-            case "password-confirm":
-                this.setState({
-                    passwordConfirm: e.target.value
-                });
-                break;
-
-            default:
-                console.log('Unknown field given')
-        }
-    }
-
-
-    render(){
-        
+    render(){   
         return (
             <>
                 <Layout>
                     <AccountPrompt headerText='Registration' width={'500px'}>
                         <Form onSubmit={this.register.bind(this)}>
                             <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage}/>
+
                             <InputField id='username'>
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control ref={this.usernameField} value={this.state.username} onChange={this.updateField.bind(this)}  type="text"  placeholder="Enter username" />
+                                <UsernameField ref={this.usernameComponent} fieldName={'Username'} />
                             </InputField>
                             <InputField id='password'>
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control ref={this.passwordField} value={this.state.password} onChange={this.updateField.bind(this)}  type="password"  placeholder="Enter password" />
+                                <PasswordField ref={this.passwordComponent} fieldName={'Password'} />
                             </InputField>
-                            <InputField id='password-confirm'>
-                                <Form.Label>Password Confirm</Form.Label>
-                                <Form.Control ref={this.passwordConfirmField} value={this.state.passwordConfirm} onChange={this.updateField.bind(this)}  type="password"  placeholder="Confirm your password" />
+                            <InputField id='confirm-password'>
+                                <PasswordField ref={this.confirmPasswordComponent} fieldName={'Confirm Password'} />
                             </InputField>
                             <InputField id='email'>
                                 <EmailField ref={this.emailComponent} fieldName={'Email Address'} />
                             </InputField>
                             <InputField id='hcaptcha'>
-                                {parseBoolFromStr(process.env.NEXT_PUBLIC_USING_HCAPTCHA) ? (
-                                <HCaptcha
-                                        size={this.state.hcaptchaSize}
-                                        sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY}
-                                        onVerify={(token,ekey) => this.handleCaptcha(token, ekey)}
-                                        ref={this.captchaRef}
-                                    />
-                                ) : (null)}
+                                <CaptchaField ref={this.captchaComponent}/>
                             </InputField>
                             <SubmitButton action={this.register.bind(this)} actionText='Register'/>   
                         </Form>
