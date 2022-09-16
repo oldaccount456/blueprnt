@@ -43,13 +43,6 @@ export default async function create(req, res) {
                 successful: false
             });
         }
-       
-        if(!req.body.email.length > 320){
-            return res.status(400).json({
-                message: 'You sent an invalid type of request, your entire email address cannot be over 320 characters long',
-                successful: false
-            });
-        }
 
         if(!validateEmail(req.body.email)){
             return res.status(400).json({
