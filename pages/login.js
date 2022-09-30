@@ -45,9 +45,9 @@ export default class Login extends React.Component{
     }
 
     validateComponent(component, handleHighlight=true){
-        const validateUsername = component.validate();
-        if(!validateUsername.success){
-            this.handleErrorPopUp(validateUsername.message);
+        const validateField = component.validate();
+        if(!validateField.success){
+            this.handleErrorPopUp(validateField.message);
             if(handleHighlight) component.highlight();
             return false;
         }
