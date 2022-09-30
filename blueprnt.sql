@@ -18,7 +18,7 @@ COMMENT ON COLUMN account.id IS 'Unique account record ID, used as a primary key
 COMMENT ON COLUMN account.username IS 'Unique username to identify the account';
 COMMENT ON COLUMN account.password IS 'Bcrypt hash of the accounts password';
 COMMENT ON COLUMN account.created_at IS 'The date/timestamp of when the account was created';
-
+COMMENT ON COLUMN account.api_key IS 'The API key used for uploads, to identify a specific account';
 
 
 DROP TABLE IF EXISTS storage;
@@ -70,10 +70,9 @@ CREATE TABLE current_jwt (
 
 
 ALTER SEQUENCE current_jwt_id_seq RESTART WITH 1;
-
 COMMENT ON TABLE current_jwt IS 'Record of JWT tokens owned by an account';
 COMMENT ON COLUMN current_jwt.id IS 'The JWT token record ID';
-COMMENT ON COLUMN current_jwt.id IS 'Account ID of the JWT holder';
+COMMENT ON COLUMN current_jwt.account_id IS 'Account ID of the JWT holder';
 COMMENT ON COLUMN current_jwt.jwt_token IS 'The value of the token, used in query';
 
 DROP TABLE IF EXISTS blacklisted_jwt;
@@ -84,7 +83,6 @@ CREATE TABLE blacklisted_jwt (
 );
 
 ALTER SEQUENCE blacklisted_jwt_id_seq RESTART WITH 1;
-
 COMMENT ON TABLE blacklisted_jwt IS 'Record of blacklisted JWTs collected';
 COMMENT ON COLUMN blacklisted_jwt.id IS 'The unique blacklisted JWT record ID, used as a primary key';
 COMMENT ON COLUMN blacklisted_jwt.jwt_token IS 'The value of the JWT, used in query';
