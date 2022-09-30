@@ -9,6 +9,10 @@ import Image from 'next/image';
 import styles from './Navbar.module.css';
 
 export default function NavbarComponent(props){
+    const browseFiles = (e) => {
+        e.preventDefault();
+        document.getElementsByClassName('dzu-input')[0].click();
+    }
     return (
         <Navbar id={styles['navbar']} bg="light" expand="lg">
             <Container fluid>
@@ -46,7 +50,7 @@ export default function NavbarComponent(props){
                                 ) : (
                                     <>
                                         <Nav.Link className={styles['nav-link']} href="/">
-                                            <Button  className={`${styles['nav-link']} ${styles['upload-btn']}`} variant="danger" type="submit">
+                                            <Button onClick={browseFiles} className={`${styles['nav-link']} ${styles['upload-btn']}`} variant="danger" type="submit">
                                             Upload
                                             </Button>
                       
