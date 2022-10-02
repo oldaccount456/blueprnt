@@ -60,7 +60,7 @@ class ImageViewer extends React.Component{
                 <Head>
                     <meta name="description" content="BluePrnt is a free, clean, easy to use image host" />
                     <meta name="keywords" content={`blueprnt, GIF capture, imagehost, screen capture, screenshot app, visual bookmark tool, screen GIF`} />
-                    <title>View Image | BluePrnt</title>
+                    <title>View Content | BluePrnt</title>
                     <meta property="og:title" content="Untitled Album"/>
                     <meta property="og:type" content="website"/>
                     <meta property="og:url" content="/"/>
