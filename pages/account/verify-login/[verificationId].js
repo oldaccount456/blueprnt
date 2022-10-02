@@ -30,7 +30,7 @@ class VerifyLogin extends React.Component{
             errorMessage: '',
             processing: false,
         }
-        this.verifyLogin();
+        this.verifyRequest();
     }
 
     handleErrorPopUp(errorMessage){
@@ -47,13 +47,13 @@ class VerifyLogin extends React.Component{
         });
     }
 
-    async verifyLogin(){
+    async verifyRequest(){
         this.setState({
             processing: true
         });
 
         try{
-            const loginVerificationReq = await Axios.post('/api/account/verify-login', {
+            const loginVerificationReq = await Axios.post('/api/account/verify-request', {
                 'verificationId': this.props.verificationId,
             });
             this.setState({
@@ -88,7 +88,7 @@ class VerifyLogin extends React.Component{
         return (
             <>
                 <Layout user={this.props.user}>
-                    <AccountPrompt headerText='Login' width={'500px'}>
+                    <AccountPrompt headerText='Verify Login Request' width={'500px'}>
                         <Form onSubmit={this.continue.bind(this)}>
                             <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage}/>
                             <SubmitButton action={this.continue.bind(this)} actionText='Continue'/>   
