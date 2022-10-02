@@ -6,7 +6,7 @@ const botChecks = require('@/lib/botChecks').default;
 const {validateStr, validatePassword} = require('@/utils/validator');
 const getIp = require('@/utils/getIp').default;
 
-export default async function changePassword(req, res) {
+export default async function updatePassword(req, res) {
     if(req.method === 'POST'){
         if(!validateStr(req.body.token)){
             return res.status(400).json({
@@ -51,7 +51,7 @@ export default async function changePassword(req, res) {
                 return username;
             }
             catch(e){
-                return res.status(400).json({
+                return res.status(403).json({
                     message: 'You sent an invalid type of request, please provide a valid authorization token',
                     successful: false
                 });
@@ -83,7 +83,7 @@ export default async function changePassword(req, res) {
         const checkOldPassword = await bcrypt.compare(req.body.oldPassword, userQuery.password)
 
         if(!checkOldPassword){
-            return res.status(400).json({
+            return res.status(200).json({
                 message: 'Your old password is incorrect',
                 successful: false
             });
@@ -91,7 +91,7 @@ export default async function changePassword(req, res) {
 
         const checkNewPassword = await bcrypt.compare(req.body.newPassword, userQuery.password)
         if(checkNewPassword){
-            return res.status(400).json({
+            return res.status(200).json({
                 message: 'Your new password is the same as your current password, please choose a different one',
                 successful: false
             });

@@ -80,7 +80,7 @@ export default class PasswordManagement extends React.Component{
         });
         
         try{
-            const changePasswordReq = await Axios.post('/api/account/change-password', {
+            const updatePasswordReq = await Axios.post('/api/account/update-password', {
                 'token': Cookies.get('token'),
                 'oldPassword': oldPasswordComponent.state.value,
                 'newPassword': newPasswordComponent.state.value,
@@ -88,7 +88,10 @@ export default class PasswordManagement extends React.Component{
             this.setState({
                 processing: false,
             });
-            Cookies.set('token', changePasswordReq.data.token);
+            if(!updatePasswordReq.data.successful){
+                return this.handleErrorPopUp(updatePasswordReq.data.message);
+            }
+            Cookies.set('token', updatePasswordReq.data.token);
             this.handleSuccessPopUp('Your password has been updated')
         }
         catch(err){
