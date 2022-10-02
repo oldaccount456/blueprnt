@@ -6,7 +6,7 @@ import {
 } from 'react-bootstrap';
 
 import FormStatus from '@/components/Form/FormStatus';
-import {EmailField} from '@/components/Form/InputField/Types';
+import {EmailField,VerificationField} from '@/components/Form/InputField/Types';
 import React from 'react';
 import Axios from 'axios';
 import Cookies from 'js-cookie';
@@ -19,11 +19,13 @@ export default class EmailManagement extends React.Component{
             successMessage: '',
             errorMessage: '',
             processing: false,
+            verificationPrompt: false,
         };
 
         
         this.newEmailComponent = React.createRef();
         this.confirmNewEmailComponent = React.createRef();
+        this.verificationCodeComponent = React.createRef();
 
     }
 
@@ -43,22 +45,17 @@ export default class EmailManagement extends React.Component{
     }
 
     validateComponent(component, handleHighlight=true){
-        const validateUsername = component.validate();
-        if(!validateUsername.success){
-            this.handleErrorPopUp(validateUsername.message);
+        const validateComponent = component.validate();
+        if(!validateComponent.success){
+            this.handleErrorPopUp(validateComponent.message);
             if(handleHighlight) component.highlight();
             return false;
         }
-
         if(handleHighlight) component.unhighlight();
         return true;
     }
 
-    async updateEmail(e){
-        if(e){
-            e.preventDefault();
-        }
-
+    async updateEmail(){
         const newEmailComponent = this.newEmailComponent.current;
         const confirmNewEmailComponent = this.confirmNewEmailComponent.current;
         
@@ -82,14 +79,54 @@ export default class EmailManagement extends React.Component{
         });
         
         try{
-            const changeEmailReq = await Axios.post('/api/account/change-email', {
+            const updateEmailReq = await Axios.post('/api/account/update-email', {
                 token: Cookies.get('token'),
                 newEmail: newEmailComponent.state.value,
             });
             this.setState({
                 processing: false,
             });
-            // show prompt for validating past email??
+            if(!updateEmailReq.data.successful){
+                return this.handleErrorPopUp(updateEmailReq.data.message);
+            }
+            this.setState({
+                verificationPrompt: true
+            });
+            this.handleSuccessPopUp(`We'll need to verify your old email address (${updateEmailReq.data.oldEmailAddr}) in order to change it. Please check both your inbox and spam folder for a verification code.`)
+        }
+        catch(err){
+            console.log(err);
+            let errorMessage = (!err.response.data.message || err.response.data.message == "") ?  "There was an error, please contact an admin for more." : err.response.data.message;
+            if(Number(err.response.status) === 429){
+                errorMessage = err.response.data
+            }
+            this.setState({
+                processing: false,
+            });
+            return this.handleErrorPopUp(errorMessage);
+        } 
+    }
+    
+    async verifyRequest(){
+        const verificationCodeComponent = this.verificationCodeComponent.current;
+        const verificationCodeValidation = this.validateComponent(verificationCodeComponent);
+        if(!verificationCodeValidation) return;
+
+        this.setState({
+            processing: true
+        });
+        
+        try{
+            const verifyRequest = await Axios.post('/api/account/verify-request', {
+                'verificationId': verificationCodeComponent.state.value,
+            });
+            this.setState({
+                processing: false,
+            });
+            if(!verifyRequest.data.successful){
+                return this.handleErrorPopUp(verifyRequest.data.message);
+            }
+            window.location.href = '/account/panel';
         }
         catch(err){
             console.log(err);
@@ -108,25 +145,46 @@ export default class EmailManagement extends React.Component{
             <>
                 <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage}/>
                 <Container>
-                    <Row className='account-details-row-2'>
-                        <Col>
-                            <div className='panel-form-label'>
-                                New Email
-                            </div>
-                            <EmailField ref={this.newEmailComponent} fieldName={''}/>
-                        </Col>
-                        <Col>
-                            <div className='panel-form-label'>
-                                Confirm New Email
-                            </div>
-                            <EmailField ref={this.confirmNewEmailComponent} fieldName={''}/>
-                        </Col>
-                    </Row>
-                    <Row className='account-details-row-2'>
-                        <Col>
-                            <Button onClick={this.updateEmail.bind(this)} className='panel-form-label' variant='primary'>Change Email</Button>
-                        </Col>
-                    </Row>
+                    {this.state.verificationPrompt ? (
+                    <>
+                        <Row className='account-details-row-2'>
+                            <Col>
+                                <div className='panel-form-label'>
+                                    Verification Code
+                                </div>
+                                <VerificationField ref={this.verificationCodeComponent} fieldName={''}/>
+                            </Col>
+                            
+                        </Row>
+                        <Row className='account-details-row-2'>
+                            <Col>
+                                <Button onClick={this.verifyRequest.bind(this)} className='panel-form-label' variant='primary'>Verify</Button>
+                            </Col>
+                        </Row>
+                    </>
+                    ) : (
+                        <>
+                            <Row className='account-details-row-2'>
+                                <Col>
+                                    <div className='panel-form-label'>
+                                        New Email
+                                    </div>
+                                    <EmailField ref={this.newEmailComponent} fieldName={''}/>
+                                </Col>
+                                <Col>
+                                    <div className='panel-form-label'>
+                                        Confirm New Email
+                                    </div>
+                                    <EmailField ref={this.confirmNewEmailComponent} fieldName={''}/>
+                                </Col>
+                            </Row>
+                            <Row className='account-details-row-2'>
+                                <Col>
+                                    <Button onClick={this.updateEmail.bind(this)} className='panel-form-label' variant='primary'>Change Email</Button>
+                                </Col>
+                            </Row>
+                        </>
+                    )}
                 </Container>
             </>
         )
