@@ -116,7 +116,7 @@ const getUniqueVerificationCode = async () => {
 verifyLoginEmailEvent.on('sendEmail', async (userQuery, ipAddress) => {
     const emailContent = await getEmailContent('verify-login.html');
     const uniqueId = await getUniqueVerificationCode();
-    const locationDetails = await getIPDetails(ipAddress); 
+    const locationDetails = await getIpDetails(ipAddress); 
     await verifyLogin.create({
         id: null,
         account_id: userQuery.id,
