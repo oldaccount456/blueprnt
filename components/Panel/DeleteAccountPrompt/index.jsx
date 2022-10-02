@@ -1,4 +1,6 @@
 import React from 'react';
+import Axios from 'axios';
+import Cookies from 'js-cookie';
 
 import {
     Modal,
@@ -27,8 +29,30 @@ export default class DeleteAccountPrompt extends React.Component{
     }
 
     async deleteAccount(){
+        try{
+            const deleteAccountReq = await Axios.post('/api/account/delete-account', {
+                token: Cookies.get('token'),
+            });
+            this.setState({
+                processing: false,
+            });
+            if(!deleteAccountReq.data.successful){
+                alert(deleteAccountReq.data.message);
+            }
 
-        alert('Sending verif email and deleting..')
+            alert(`We'll need to verify your request, so we have sent a verification email to (${deleteAccountReq.data.emailAddr}). Please check both your inbox and spam folder for the email and follow the instructions on there.`)
+        }
+        catch(err){
+            console.log(err);
+            let errorMessage = (!err.response.data.message || err.response.data.message == "") ?  "There was an error, please contact an admin for more." : err.response.data.message;
+            if(Number(err.response.status) === 429){
+                errorMessage = err.response.data
+            }
+            this.setState({
+                processing: false,
+            });
+            return this.handleErrorPopUp(errorMessage);
+        } 
 
     }
 
@@ -40,7 +64,7 @@ export default class DeleteAccountPrompt extends React.Component{
                 </Modal.Header>
                 <Modal.Body>Are you sure you want to delete your account?</Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={this.deleteAccount.bind(this)}>
+                    <Button variant="danger" onClick={this.deleteAccount.bind(this)}>
                         Yes
                     </Button>
                     <Button variant="primary" onClick={this.closePrompt.bind(this)}>
