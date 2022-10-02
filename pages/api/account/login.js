@@ -1,17 +1,11 @@
 const bcrypt = require("bcryptjs");
-const events = require('events');
-
-const {account, loginHistory, verifyLogin} = require('@/lib/database');
+const {account, loginHistory} = require('@/lib/database');
 const botChecks = require('@/lib/botChecks').default;
 const {createToken} = require('@/lib/authentication');
-const {sendEmail} = require('@/lib/aws');
 
 const {validateStr, validateUsername, validatePassword} = require('@/utils/validator');
 const getIp = require('@/utils/getIp').default;
-const getEmailContent = require('@/utils/getEmailContent').default;
-const getIpDetails = require('@/utils/getIpDetails').default;
-
-const verifyLoginEmailEvent = new events.EventEmitter();
+const {createVerificationRequest} = require('@/utils/verification');
 
 export default async function login(req, res) {
     if(req.method === 'POST'){
@@ -81,7 +75,7 @@ export default async function login(req, res) {
         )));
 
         if(!allLoginsByIp.includes(ipAddress)){
-            verifyLoginEmailEvent.emit('sendEmail', userQuery, ipAddress);
+            await createVerificationRequest(userQuery, 'verifyLoginRequest', ipAddress);
             return res.status(401).json({
                 message: 'New login location detected, please check your email.',
                 successful: false
@@ -101,38 +95,3 @@ export default async function login(req, res) {
     });
 }
 
-const getUniqueVerificationCode = async () => {
-    let uniqueVerificationCode = Math.random().toString(26).slice(2);
-    const verificationCodeExists = await verifyLogin.findOne({where: {
-        verification_hash: uniqueVerificationCode
-    }});
-    while(verificationCodeExists){
-        uniqueVerificationCode = Math.random().toString(26).slice(2);
-    }
-    return uniqueVerificationCode;
-}
-
-
-verifyLoginEmailEvent.on('sendEmail', async (userQuery, ipAddress) => {
-    const emailContent = await getEmailContent('verify-login.html');
-    const uniqueId = await getUniqueVerificationCode();
-    const locationDetails = await getIpDetails(ipAddress); 
-    await verifyLogin.create({
-        id: null,
-        account_id: userQuery.id,
-        ip_address: ipAddress,
-        verification_hash: uniqueId
-    });
-    const editedEmailContent = emailContent
-    .replace('{USERNAME}', userQuery.username)
-    .replace('{IP_ADDRESS}', ipAddress)
-    .replace('{LOCATION}', locationDetails)
-    .replace('{DOMAIN_ENDPOINT}', process.env.DOMAIN_ENDPOINT)
-    .replace('{CODE_HERE}', uniqueId);
-    await sendEmail({
-        'from': process.env.SYSTEM_EMAIL_ADDRESS,
-        'to': userQuery.email,
-        'subject': 'Verify BluePrnt login from new location',
-        'html': editedEmailContent
-    });
-});
