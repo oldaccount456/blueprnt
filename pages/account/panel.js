@@ -23,7 +23,7 @@ export async function getServerSideProps({ req, res }){
     if (token == null){
         return {
             redirect: {
-                destination: '/login',
+                destination: '/account/login',
                 permanent: false,
             },
         }
@@ -40,7 +40,7 @@ export async function getServerSideProps({ req, res }){
         if(!accountQuery){
             return {
                 redirect: {
-                    destination: '/logout',
+                    destination: '/account/logout',
                     permanent: false,
                 },
             }
@@ -71,7 +71,7 @@ export async function getServerSideProps({ req, res }){
         console.log(e)
         return {
             redirect: {
-                destination: '/login',
+                destination: '/account/login',
                 permanent: false,
             },
         }

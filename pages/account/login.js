@@ -1,20 +1,20 @@
 import Layout from '@/components/Layout';
 import AccountPrompt from '@/components/Form/Prompt';
 import InputField from '@/components/Form/InputField';
-import {UsernameField, PasswordField, EmailField, CaptchaField} from '@/components/Form/InputField/Types';
+import {UsernameField, PasswordField, CaptchaField} from '@/components/Form/InputField/Types';
 import SubmitButton from '@/components/Form/SubmitButton';
 import FormStatus from '@/components/Form/FormStatus';
 
 import React from 'react';
 import Axios from 'axios';
 
-import Cookies from 'js-cookie';
-
 import {
     Form,
 } from 'react-bootstrap';
 
-export default class Register extends React.Component{
+import Cookies from 'js-cookie';
+
+export default class Login extends React.Component{
     constructor(props){
         super(props);
 
@@ -26,8 +26,6 @@ export default class Register extends React.Component{
 
         this.usernameComponent = React.createRef();
         this.passwordComponent = React.createRef();
-        this.confirmPasswordComponent = React.createRef();
-        this.emailComponent = React.createRef();
         this.captchaComponent = React.createRef();
     }
 
@@ -58,12 +56,10 @@ export default class Register extends React.Component{
         return true;
     }
 
-    async register(e){
+    async login(e){
         e.preventDefault();
         const usernameComponent = this.usernameComponent.current;
         const passwordComponent = this.passwordComponent.current;
-        const confirmPasswordComponent = this.confirmPasswordComponent.current;
-        const emailComponent = this.emailComponent.current;
         const captchaComponent = this.captchaComponent.current;
 
         const usernameValidation = this.validateComponent(usernameComponent);
@@ -71,20 +67,6 @@ export default class Register extends React.Component{
 
         const passwordValidation = this.validateComponent(passwordComponent);
         if(!passwordValidation) return;
-
-        const confirmPasswordValidation = this.validateComponent(confirmPasswordComponent);
-        if(!confirmPasswordValidation) return;
-
-        if(passwordComponent.state.value !== confirmPasswordComponent.state.value){
-            passwordComponent.highlight();
-            confirmPasswordComponent.highlight();
-            return this.handleErrorPopUp('Your passwords must match');
-        }
-        passwordComponent.unhighlight();
-        confirmPasswordComponent.unhighlight();   
-
-        const emailValidation = this.validateComponent(emailComponent);
-        if(!emailValidation) return;
 
         const captchaValidation = this.validateComponent(captchaComponent, false);
         if(!captchaValidation) return;
@@ -94,26 +76,23 @@ export default class Register extends React.Component{
         });
 
         try{
-            const createReq = await Axios.post('/api/account/register', {
+            const loginReq = await Axios.post('/api/account/login', {
                 'username': usernameComponent.state.value,
                 'password': passwordComponent.state.value,
-                'email': emailComponent.state.value,
                 'hcaptchaToken': captchaComponent.state.hcaptchaToken,
             });
             this.setState({
                 processing: false
             });
-
-            if(!createReq.data.successful){
-                return this.handleErrorPopUp(createReq.data.message);
+            if(!loginReq.data.successful){
+                return this.handleErrorPopUp(loginReq.data.message);
             }
-            
-            Cookies.set('token', createReq.data.token);
-            this.handleSuccessPopUp(`Your account has been created`);
-            return window.location.href = '/panel';
+            Cookies.set('token', loginReq.data.token);
+            this.handleSuccessPopUp(`You have successfully logged in`);
+            return window.location.href = '/account/gallery';
         }
         catch(err){
-            console.log(err);
+            console.log(err)
             captchaComponent.resetCaptcha();
             let errorMessage = (!err.response.data.message || err.response.data.message == "") ?  "There was an error, please contact an admin for more." : err.response.data.message;
             if(Number(err.response.status) === 429){
@@ -127,30 +106,23 @@ export default class Register extends React.Component{
 
     }
 
-    render(){   
+    render(){
         return (
             <>
-                <Layout>
-                    <AccountPrompt headerText='Registration' width={'500px'}>
-                        <Form onSubmit={this.register.bind(this)}>
+                <Layout user={this.props.user}>
+                    <AccountPrompt headerText='Login' width={'500px'}>
+                        <Form onSubmit={this.login.bind(this)}>
                             <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage}/>
-
                             <InputField id='username'>
                                 <UsernameField ref={this.usernameComponent} fieldName={'Username'} />
                             </InputField>
                             <InputField id='password'>
                                 <PasswordField ref={this.passwordComponent} fieldName={'Password'} />
                             </InputField>
-                            <InputField id='confirm-password'>
-                                <PasswordField ref={this.confirmPasswordComponent} fieldName={'Confirm Password'} />
-                            </InputField>
-                            <InputField id='email'>
-                                <EmailField ref={this.emailComponent} fieldName={'Email Address'} />
-                            </InputField>
                             <InputField id='hcaptcha'>
                                 <CaptchaField ref={this.captchaComponent}/>
                             </InputField>
-                            <SubmitButton action={this.register.bind(this)} actionText='Register'/>   
+                            <SubmitButton action={this.login.bind(this)} actionText='Login'/>   
                         </Form>
                     </AccountPrompt>
                 </Layout>

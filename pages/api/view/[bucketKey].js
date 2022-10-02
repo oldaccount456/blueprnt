@@ -1,7 +1,7 @@
 
 
 import {bucketObject} from '@/lib/database';
-import getFileBuffer from '@/lib/aws';
+import {getFileBuffer} from '@/lib/aws';
 import bufferToStream from '@/utils/handleBuffer';
 
 export default async function fileByBucketKey(req, res) {

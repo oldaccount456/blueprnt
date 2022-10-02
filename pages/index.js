@@ -103,7 +103,6 @@ export default class LandingPage extends React.Component{
             },
         }
         try{
-            
             const uploadReq = await Axios.post(url, formData,config);
             window.location.href = `/${uploadReq.data.endpointHash}`
         }
@@ -177,7 +176,6 @@ export default class LandingPage extends React.Component{
                             onSubmit={this.handleSubmit.bind(this)}
                             autoUpload={true}
                             inputContent={'Drop images here'}
-                            
                         />
                     </div>
                 </Layout>

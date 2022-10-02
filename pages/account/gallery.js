@@ -10,7 +10,7 @@ export async function getServerSideProps({ req, res }){
     if (token == null){
         return {
             redirect: {
-                destination: '/login',
+                destination: '/account/login',
                 permanent: false,
             },
         }
@@ -23,7 +23,7 @@ export async function getServerSideProps({ req, res }){
         if(!user){
             return {
                 redirect: {
-                    destination: '/logout',
+                    destination: '/account/logout',
                     permanent: false,
                 },
             }
@@ -36,11 +36,10 @@ export async function getServerSideProps({ req, res }){
             }
         });
 
-
         const galleryItems = allStorageLinks.map((storage) => ({
             'preview': {
-                'bucketKey': storage.bucket_objects[0].bucket_key,
-                'mimetype': storage.bucket_objects[0].mimetype
+                'bucketKey': storage.bucket_objects.length > 0 ? storage.bucket_objects[0].bucket_key : null, 
+                'mimetype': storage.bucket_objects.length > 0 ? storage.bucket_objects[0].mimetype : null,
             },
             'endpointHash': storage.endpoint_hash
            
@@ -57,7 +56,7 @@ export async function getServerSideProps({ req, res }){
         console.log(e)
         return {
             redirect: {
-                destination: '/login',
+                destination: '/account/login',
                 permanent: false,
             },
         }
