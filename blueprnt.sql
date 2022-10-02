@@ -107,3 +107,25 @@ COMMENT ON COLUMN login_history.id IS 'The JWT token record ID';
 COMMENT ON COLUMN login_history.account_id IS 'Account ID of the login history record';
 COMMENT ON COLUMN login_history.ip_address IS 'IP address of the user who logged in';
 COMMENT ON COLUMN login_history.login_date IS 'Login date of user who logged in';
+
+
+DROP TABLE IF EXISTS verify_login;
+CREATE TABLE verify_login (
+  id SERIAL,
+  account_id INT NOT NULL,
+  ip_address TEXT NOT NULL,
+  verification_hash TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (id),
+  CONSTRAINT verify_login_ibfk_1 FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+ALTER SEQUENCE verify_login_id_seq RESTART WITH 1;
+ALTER TABLE verify_login ALTER COLUMN created_at SET DEFAULT now();
+
+COMMENT ON TABLE verify_login IS 'Records of login verification codes';
+COMMENT ON COLUMN verify_login.id IS 'The login verification record ID';
+COMMENT ON COLUMN verify_login.account_id IS 'The account ID of the login verification record, used to identify which account its for';
+COMMENT ON COLUMN verify_login.ip_address IS 'The IP address to be validated as a valid login';
+COMMENT ON COLUMN verify_login.verification_hash IS 'The value of the login verification code';
+COMMENT ON COLUMN verify_login.created_at IS 'The date the login verification code was requested, used to check expiry';
