@@ -6,12 +6,14 @@ import {
     NavDropdown
 } from 'react-bootstrap'
 import Image from 'next/image';
+import { useRouter } from 'next/router'
 import styles from './Navbar.module.css';
 
 export default function NavbarComponent(props){
+    const router = useRouter();
     const browseFiles = (e) => {
         e.preventDefault();
-        document.getElementsByClassName('dzu-input')[0].click();
+        router.pathname == "/" ? document.getElementsByClassName('dzu-input')[0].click() : window.location.href = '/';    
     }
     return (
         <Navbar id={styles['navbar']} bg="light" expand="lg">
@@ -27,7 +29,7 @@ export default function NavbarComponent(props){
                                 {props.user ? (
                                     <>
                                         <Nav.Link className={styles['nav-link']} href="/">
-                                            <Button className={`${styles['nav-link']} ${styles['upload-btn']}`}  variant="danger" type="submit">
+                                            <Button onClick={browseFiles} className={`${styles['nav-link']} ${styles['upload-btn']}`}  variant="danger" type="submit">
                                             Upload
                                             </Button>
                                         </Nav.Link>
@@ -35,13 +37,13 @@ export default function NavbarComponent(props){
                                         <div id={styles['profile']}>
                                             <div id={styles['avatar-circle']}>{props.user[0].toUpperCase()}</div>
                                             <NavDropdown align="end" id={styles['nav-dropdown']} title={props.user} menuVariant="transparent">
-                                                <NavDropdown.Item  className={styles['nav-dropdown-link']} href="/gallery">
+                                                <NavDropdown.Item  className={styles['nav-dropdown-link']} href="/account/gallery">
                                                     Gallery
                                                 </NavDropdown.Item>
-                                                <NavDropdown.Item  className={styles['nav-dropdown-link']} href="/panel">
+                                                <NavDropdown.Item  className={styles['nav-dropdown-link']} href="/account/panel">
                                                     Account Settings
                                                 </NavDropdown.Item>
-                                                <NavDropdown.Item  className={styles['nav-dropdown-link']} href="/logout">
+                                                <NavDropdown.Item  className={styles['nav-dropdown-link']} href="/account/logout">
                                                     Log out
                                                 </NavDropdown.Item>
                                             </NavDropdown>
@@ -51,14 +53,14 @@ export default function NavbarComponent(props){
                                     <>
                                         <Nav.Link className={styles['nav-link']} href="/">
                                             <Button onClick={browseFiles} className={`${styles['nav-link']} ${styles['upload-btn']}`} variant="danger" type="submit">
-                                            Upload
+                                                Upload
                                             </Button>
                       
                                         </Nav.Link>
-                                        <Nav.Link className={`${styles['nav-link']} ${styles['nav-text']}`} href="/login">
+                                        <Nav.Link className={`${styles['nav-link']} ${styles['nav-text']}`} href="/account/login">
                                             Login
                                         </Nav.Link>
-                                        <Nav.Link className={`${styles['nav-link']} ${styles['nav-text']}`} href="/register">
+                                        <Nav.Link className={`${styles['nav-link']} ${styles['nav-text']}`} href="/account/register">
                                             Register
                                         </Nav.Link> 
                                     </>
