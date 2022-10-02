@@ -9,7 +9,7 @@ const {sendEmail} = require('@/lib/aws');
 const {validateStr, validateUsername, validatePassword} = require('@/utils/validator');
 const getIp = require('@/utils/getIp').default;
 const getEmailContent = require('@/utils/getEmailContent').default;
-const getIPDetails = require('@/utils/getIPDetails').default;
+const getIpDetails = require('@/utils/getIpDetails').default;
 
 const verifyLoginEmailEvent = new events.EventEmitter();
 

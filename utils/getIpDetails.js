@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-export default async function getIPDetails(ip){
+export default async function getIpDetails(ip){
     try{
         const queryReq = await axios.post('https://ip.roanj.com/api/query-ip', {
             ip: ip,
