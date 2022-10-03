@@ -27,7 +27,7 @@ export default class EmailField extends GeneralInputField{
         return (
             <>
                 <Form.Label>{this.props.fieldName}</Form.Label>
-                <Form.Control ref={this.formControlRef} value={this.state.value} onChange={this.updateField.bind(this)} type="email" placeholder={this.props.fieldName} />
+                <Form.Control ref={this.formControlRef} value={this.state.value} onChange={this.updateField.bind(this)} type="email"  />
             </>
         )
     }

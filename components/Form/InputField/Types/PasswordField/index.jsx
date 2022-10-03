@@ -27,7 +27,7 @@ export default class PasswordField extends GeneralInputField{
         return (
             <>
                 <Form.Label>{this.props.fieldName}</Form.Label>
-                <Form.Control ref={this.formControlRef} value={this.state.value} onChange={this.updateField.bind(this)} type="password" placeholder={this.props.fieldName} />
+                <Form.Control ref={this.formControlRef} value={this.state.value} onChange={this.updateField.bind(this)} type="password" />
             </>
         )
     }
