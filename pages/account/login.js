@@ -13,6 +13,7 @@ import {
 } from 'react-bootstrap';
 
 import Cookies from 'js-cookie';
+import styles from '@/styles/Login.module.css';
 
 export default class Login extends React.Component{
     constructor(props){
@@ -124,7 +125,13 @@ export default class Login extends React.Component{
                             </InputField>
                             <SubmitButton action={this.login.bind(this)} actionText='Login'/>   
                         </Form>
-                    </AccountPrompt>
+                        <div id={styles['register-field']} >
+                            <a href='/account/recover'>Register</a>
+                        </div>  
+                        <div id={styles['forgot-password-field']} >
+                            <a href='/account/recover'>Forgot Password</a>
+                        </div>  
+                        </AccountPrompt>
                 </Layout>
             </>
         );
