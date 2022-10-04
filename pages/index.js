@@ -41,7 +41,7 @@ export default class LandingPage extends React.Component{
             errorMessage: '',
             uploadingFile: false,
             startedUpload: false,
-            files: [],
+            filesBeingProcessed: [],
             fileObjs: [],
         };
     }
@@ -124,11 +124,11 @@ export default class LandingPage extends React.Component{
             })
         }
         if(status === 'done'){
-            let currentFiles = this.state.files;
+            let currentFiles = this.state.filesBeingProcessed;
             const index = currentFiles.indexOf(data.meta.id);
             currentFiles.splice(index, 1); 
             this.setState({
-                files: currentFiles
+                filesBeingProcessed: currentFiles
             });
 
             let currentFileObjs = this.state.fileObjs;
@@ -139,25 +139,24 @@ export default class LandingPage extends React.Component{
         }
        
         if(status === 'preparing'){
-            let currentFiles = this.state.files;
+            let currentFiles = this.state.filesBeingProcessed;
             if(!currentFiles.includes(data.meta.id)){
                 currentFiles.push(data.meta.id);
             }
             this.setState({
-                files: currentFiles
+                filesBeingProcessed: currentFiles
             });
         }
 
         if(status === 'removed'){
             let currentFileObjs = this.state.fileObjs;
             currentFileObjs.pop();
-            console.log(currentFileObjs)
+            
             this.setState({
                 fileObjs: currentFileObjs
-            })
-
+            });
         }
-        if(this.state.files.length === 0){
+        if(this.state.filesBeingProcessed.length === 0 && this.state.fileObjs.length !== 0){
             this.handleSubmit();
         }
     }
@@ -175,7 +174,7 @@ export default class LandingPage extends React.Component{
                             onChangeStatus={this.handleChangeStatus.bind(this)}
                             onSubmit={this.handleSubmit.bind(this)}
                             autoUpload={true}
-                            inputContent={'Drop images here'}
+                            inputContent={'Drop content here'}
                         />
                     </div>
                 </Layout>
