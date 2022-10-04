@@ -28,35 +28,20 @@ export default function FormStatus(props){
     const popUpMessage = showSuccess ? showSuccess : showError;
     return (
         props.processing ? (
-            
-            <AlertPrompt center={true}>  
-                <div className='container text-center d-flex justify-content-center'>
-                    <Loaders/>
-                </div>
-            </AlertPrompt>
+            <div id={styles['loader-div']} className='container text-center d-flex justify-content-center'>
+                <Loaders/>
+            </div>
         ) : popUpMessage
     );
 }
 
 const AlertPrompt = (props) => {
     return (
-        props.center ? (
-            <div id={styles['error-alert']}>   
-                <div className='container text-center d-flex justify-content-center'>
-                    <Alert id={styles['error-box']} className={styles['loader-div']} >
-                        {props.children}
-                    </Alert>
-                </div>
-                
-            </div>
-        ) : (
-            <div id={styles['error-alert']}>   
-                <Alert id={styles['error-box']} >
-                    {props.children}
-                </Alert>
-            </div>
-        )
-        
+        <div id={styles['error-alert']}>   
+            <Alert id={styles['error-box']} >
+                {props.children}
+            </Alert>
+        </div>
     )
 }
 

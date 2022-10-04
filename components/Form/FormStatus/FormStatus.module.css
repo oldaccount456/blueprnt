@@ -1,7 +1,9 @@
 
-.loader-div{
-    width:50%;
+#loader-div{
+    margin-top:30px;
+    margin-bottom:30px;    
 }
+
 #loaders{
     color:white;
 }
