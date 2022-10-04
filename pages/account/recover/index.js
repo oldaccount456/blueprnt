@@ -108,7 +108,7 @@ export default class RecoverAccount extends React.Component{
         return (
             <>
                 <Layout user={this.props.user}>
-                    <AccountPrompt headerText='Recover Account' width={'500px'}>
+                    <AccountPrompt headerText='Recover Account' width={'300px'}>
                         <Form onSubmit={this.recoverAccount.bind(this)}>
                             <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage}/>
                             <InputField id='username'>
@@ -120,7 +120,7 @@ export default class RecoverAccount extends React.Component{
                             <InputField id='hcaptcha'>
                                 <CaptchaField ref={this.captchaComponent}/>
                             </InputField>
-                            <SubmitButton action={this.recoverAccount.bind(this)} actionText='Recover'/>   
+                            <SubmitButton action={this.recoverAccount.bind(this)} actionText='RECOVER'/>   
                         </Form>
                     </AccountPrompt>
                 </Layout>

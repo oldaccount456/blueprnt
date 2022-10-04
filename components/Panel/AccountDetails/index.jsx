@@ -8,7 +8,7 @@ import {
 
 import DeleteAccountPrompt from '@/components/Panel/DeleteAccountPrompt';
 import React from 'react';
-/* import styles from './AccountDetails.module.css'; */
+import styles from '../Panel.module.css'; 
 
 export default function AccountDetails(props){
     const deleteAccountPromptRef = React.createRef();
@@ -18,22 +18,24 @@ export default function AccountDetails(props){
             <Container>
                 <Row>
                     <Col>
-                        <div className='panel-form-label'>
+                        <div id={styles['account-details-label']}>
                             Username
                         </div>
                         <Form.Control
                             type="text"
+                            id={styles['account-details-field']}
                             value={props.accountDetails.username}
                             disabled
                             readOnly
                         />
                     </Col>
                     <Col>
-                        <div className='panel-form-label'>
+                        <div id={styles['account-details-label']}>
                             Email
                         </div>
                         <Form.Control
                             type="text"
+                            id={styles['account-details-field']}
                             value={props.accountDetails.email}
                             disabled
                             readOnly
@@ -41,57 +43,61 @@ export default function AccountDetails(props){
                 
                     </Col>
                 </Row>
-                <Row className='account-details-row-2'>
+                <Row className={styles['account-details-row-2']}>
                     <Col>
-                        <div className='panel-form-label'>
+                        <div id={styles['account-details-label']}>
                             Creation Date
                         </div>
                         <Form.Control
                             type="text"
+                            id={styles['account-details-field']}
                             value={props.accountDetails.createdAt}
                             disabled
                             readOnly
                         />
                     </Col>
                     <Col>
-                        <div className='panel-form-label'>
+                        <div id={styles['account-details-label']}>
                             API Key - <a href='#'>Activate</a>
                         </div>
                         <Form.Control
                             type="text"
+                            id={styles['account-details-field']}
                             value={props.accountDetails.apiKey}
                             disabled
                             readOnly
                         />
                     </Col>
                 </Row>
-                <Row className='account-details-row-2'>
+                <Row className={styles['account-details-row-2']}>
                     <Col>
-                        <div className='panel-form-label'>
+                        <div id={styles['account-details-label']}>
                             Last Login IP
                         </div>
                         <Form.Control
                             type="text"
+                            id={styles['account-details-field']}
                             value={props.lastLoginIP}
                             disabled
                             readOnly
                         />
                     </Col>
                     <Col>
-                        <div className='panel-form-label'>
+                        <div id={styles['account-details-label']}>
                             Last Login Date
                         </div>
                         <Form.Control
                             type="text"
+                            id={styles['account-details-field']}
                             value={props.lastLoginDate.split("+")[0]}
                             disabled
                             readOnly
                         />
                     </Col>
                 </Row>
-                <Row className='account-details-row-2'>
+                <Row className={styles['account-details-row-2']}>
                     <Col>
-                        <Button onClick={(() => {deleteAccountPromptRef.current.openPrompt()})} className='panel-form-label' variant='danger'>
+                        <Button onClick={(() => {deleteAccountPromptRef.current.openPrompt()})} id={styles['panel-action-btn']} variant='danger'>
                             Delete Account
                         </Button>
                     </Col>

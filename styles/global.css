@@ -28,27 +28,6 @@ body {
     color:white!important;
 }
 
-.form-control:focus{
-    box-shadow:none!important;
-}
-
-#account-panel-row{
-    height: 100%;
-}
-
-.panel-sidebar-border{
-    border-right: 2px solid #e5e5e5;
-}
-
-.account-details-row-2{
-    margin-top:40px;
-}
-
-.panel-form-label{
-    margin-bottom:5px;
-    float:left;
-}
-
 #image-404-text{
     margin-top:400px;
     color:white;

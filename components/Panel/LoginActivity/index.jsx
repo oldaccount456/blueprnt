@@ -8,6 +8,8 @@ import {
 const getPaginatedResult = require('@/utils/paginateResult').default;
 const censorIp = require('@/utils/censorIp').default;
 
+import styles from '../Panel.module.css'; 
+
 export default class LoginActivity extends React.Component{
     constructor(props){
         super(props);
@@ -28,8 +30,8 @@ export default class LoginActivity extends React.Component{
     render(){
         const allPastLogins = Object.keys(this.state.paginatedLoginResults).length === 0 ? [] : this.state.paginatedLoginResults[this.state.pageNo].map((login) => (
             <tr id={Math.random()}>
-                <td>{censorIp(login.ipAddress)}</td>
-                <td>{login.loginDate.split("+")[0]}</td>
+                <td className={styles['table-field']}>{censorIp(login.ipAddress)}</td>
+                <td className={styles['table-field']}>{login.loginDate.split("+")[0]}</td>
             </tr>
         ))
 
@@ -37,7 +39,7 @@ export default class LoginActivity extends React.Component{
         let max = Object.keys(this.state.paginatedLoginResults).length >= 10 ? 10 : Object.keys(this.state.paginatedLoginResults).length;
         for (let number = Object.keys(this.state.paginatedLoginResults)[0]; number <= max; number++) {
             items.push(
-                <Pagination.Item key={number} id={`page-${number}`} onClick={this.updatePageNo.bind(this)} active={number == this.state.pageNo}>
+                <Pagination.Item key={number} id={`page-${number}`} className={styles['page-btn']} onClick={this.updatePageNo.bind(this)} active={number == this.state.pageNo}>
                     {number}
                 </Pagination.Item>,
             );
@@ -48,8 +50,8 @@ export default class LoginActivity extends React.Component{
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                        <th>IP Address</th>
-                        <th>Login Date</th>
+                        <th className={styles['table-header']}>IP Address</th>
+                        <th className={styles['table-header']}>Login Date</th>
                         </tr>
                     </thead>
                     <tbody>

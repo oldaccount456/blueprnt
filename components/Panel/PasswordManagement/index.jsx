@@ -10,6 +10,8 @@ import React from 'react';
 import Axios from 'axios';
 import Cookies from 'js-cookie';
 
+import styles from '../Panel.module.css'; 
+
 export default class PasswordManagement extends React.Component{
     constructor(props){
         super(props);
@@ -113,30 +115,30 @@ export default class PasswordManagement extends React.Component{
                 <Container>
                     <Row>
                         <Col>
-                                <div className='panel-form-label'>
+                                <div id={styles['account-details-label']}>
                                     Old Password
                                 </div>
                                 <PasswordField ref={this.oldPasswordComponent} fieldName={''} />
                             </Col>
                         <Col/>
                     </Row>
-                    <Row className='account-details-row-2'>
+                    <Row className={styles['account-details-row-2']}>
                         <Col>
-                            <div className='panel-form-label'>
+                            <div id={styles['account-details-label']}>
                                 New Password
                             </div>
                             <PasswordField ref={this.newPasswordComponent} fieldName={''} />
                         </Col>
                         <Col>
-                            <div className='panel-form-label'>
+                            <div id={styles['account-details-label']}>
                                 Confirm New Password
                             </div>
                             <PasswordField ref={this.confirmNewPasswordComponent} fieldName={''} />
                         </Col>
                     </Row>
-                    <Row className='account-details-row-2'>
+                    <Row className={styles['account-details-row-2']}>
                         <Col>
-                            <Button onClick={this.updatePassword.bind(this)} className='panel-form-label' variant='primary'>Change Password</Button>
+                            <Button onClick={this.updatePassword.bind(this)} id={styles['panel-action-btn']} variant='primary'>Change Password</Button>
                         </Col>
                         <Col/>
                     </Row>

@@ -5,6 +5,7 @@ import {
 
 import GeneralInputField from '@/components/Form/InputField/Types/GeneralInputField';
 import {validateEmail} from '@/utils/validator';
+import styles from '../../InputField.module.css';
 
 export default class EmailField extends GeneralInputField{
     constructor(props){
@@ -26,8 +27,8 @@ export default class EmailField extends GeneralInputField{
     render(){
         return (
             <>
-                <Form.Label>{this.props.fieldName}</Form.Label>
-                <Form.Control ref={this.formControlRef} value={this.state.value} onChange={this.updateField.bind(this)} type="email"  />
+                <Form.Label id={styles['form-label']}>{this.props.fieldName}</Form.Label>
+                <Form.Control id={styles['form-input']} ref={this.formControlRef} value={this.state.value} onChange={this.updateField.bind(this)} type="email"  />
             </>
         )
     }

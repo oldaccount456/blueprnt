@@ -12,8 +12,8 @@ export default function AccountPrompt(props){
             <Row>
                 <Col>
                     <div className='container text-center d-flex justify-content-center'> 
-                        <Card bg='light' style={{'width': props.width}} className='mb-2 lg-card'>
-                            <Card.Header>{props.headerText}</Card.Header>
+                        <Card id={styles['account-prompt-card']} style={{'width': props.width, 'height': props.height}} className='mb-2 lg-card'>
+                            
                             <Card.Body>
                                 {props.children}
                             </Card.Body>

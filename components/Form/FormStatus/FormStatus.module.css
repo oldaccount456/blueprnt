@@ -1,3 +1,35 @@
 #loaders{
     color:white;
 }
+
+#error-icon{
+    background-image: url(/exclamation.png)!important;
+    height: 21px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 23px;
+}
+
+.prompt-message{
+    margin-left:2%;
+}
+
+#error-alert{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+}
+
+#error-box{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    letter-spacing: 1px!important;
+    color: white!important;
+    font-weight: 500;
+    font-size:0.9rem;
+    padding: .6rem 1.25rem!important;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #0aa3cd!important;
+    display: flex;
+    align-items:center;  
+}

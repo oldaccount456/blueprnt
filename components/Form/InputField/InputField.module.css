@@ -1,3 +1,17 @@
 .move-bottom{
     margin-bottom: 20px;
 }
+
+#form-label{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    letter-spacing: 1px!important;
+    color: white!important;
+    float:left;
+}
+
+#form-input{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    border: 2px solid #0aa3cd!important;
+    background: rgba(0, 0, 0, 0.5);
+    color:white;
+}

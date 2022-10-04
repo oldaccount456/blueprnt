@@ -5,3 +5,11 @@
 #register-field{
     margin-top:30px;
 }
+
+.other-option-field{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    letter-spacing: 1px!important;
+    color: white!important;
+    user-select: none!important;
+    cursor: pointer;
+}

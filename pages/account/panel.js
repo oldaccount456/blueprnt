@@ -17,6 +17,8 @@ import {
     Tab
 } from 'react-bootstrap';
 
+import styles from '@/styles/Panel.module.css';
+
 export async function getServerSideProps({ req, res }){
     const authHeader = req.headers['cookie']
     const token = authHeader && authHeader.split('token=')[1];
@@ -83,22 +85,22 @@ export default function Panel(props){
     return (
         <>
             <Layout user={props.user}>
-                <AccountPrompt headerText='Panel' width={'900px'} height={'300px'}>
+                <AccountPrompt headerText='Panel' width={'900px'} height={'385px'}>
                     <Tab.Container id="left-tabs-example" defaultActiveKey="first">
                         <Row id='account-panel-row'>
-                            <Col sm={3} className='panel-sidebar-border'>
+                            <Col sm={3} className={styles['panel-sidebar-border']}>
                                 <Nav variant="pills" className="flex-column">
-                                    <Nav.Item>
-                                        <Nav.Link eventKey="first">Account Details</Nav.Link>
+                                    <Nav.Item >
+                                        <Nav.Link className={styles['panel-nav-link']} eventKey="first">Account Details</Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item>
-                                        <Nav.Link eventKey="second">Change Password</Nav.Link>
+                                    <Nav.Item className={styles['panel-nav-item']}>
+                                        <Nav.Link className={styles['panel-nav-link']} eventKey="second">Change Password</Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item>
-                                        <Nav.Link eventKey="third">Change Email</Nav.Link>
+                                    <Nav.Item className={styles['panel-nav-item']}>
+                                        <Nav.Link  className={styles['panel-nav-link']} eventKey="third">Change Email</Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item>
-                                        <Nav.Link eventKey="fourth">Login History</Nav.Link>
+                                    <Nav.Item className={styles['panel-nav-item']}>
+                                        <Nav.Link className={styles['panel-nav-link']} eventKey="fourth">Login History</Nav.Link>
                                     </Nav.Item>
                                 </Nav>
                             </Col>

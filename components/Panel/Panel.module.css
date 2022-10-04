@@ -1,0 +1,46 @@
+#account-details-field, .delete-account{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    border: 2px solid #0aa3cd!important;
+    background: rgba(0, 0, 0, 0.5);
+    color:white;
+}
+
+.delete-account{
+    background: rgba(0, 0, 0, 1);
+}
+
+#account-details-label, 
+.table-header, 
+.table-field,
+.page-btn
+{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    letter-spacing: 1px!important;
+    color: white!important;
+    float:left;
+}
+
+#panel-action-btn, #delete-account-btn{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    letter-spacing: 1px!important;
+    color: white!important;
+    outline: none;
+    box-shadow: none;
+    width:300px;
+    background: transparent;
+    border-width:2.5px;
+}
+
+.account-details-row-2{
+    margin-top:40px;
+}
+.table-header, 
+.table-field,
+.page-btn{
+    float:none;
+}
+
+
+#delete-account-btn{
+    width:100px;
+}

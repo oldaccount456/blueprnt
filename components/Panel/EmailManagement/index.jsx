@@ -11,6 +11,8 @@ import React from 'react';
 import Axios from 'axios';
 import Cookies from 'js-cookie';
 
+import styles from '../Panel.module.css'; 
+
 export default class EmailManagement extends React.Component{
     constructor(props){
         super(props);
@@ -147,40 +149,40 @@ export default class EmailManagement extends React.Component{
                 <Container>
                     {this.state.verificationPrompt ? (
                     <>
-                        <Row className='account-details-row-2'>
+                        <Row className={styles['account-details-row-2']}>
                             <Col>
-                                <div className='panel-form-label'>
+                                <div id={styles['account-details-label']}>
                                     Verification Code
                                 </div>
                                 <VerificationField ref={this.verificationCodeComponent} fieldName={''}/>
                             </Col>
                             
                         </Row>
-                        <Row className='account-details-row-2'>
+                        <Row className={styles['account-details-row-2']}>
                             <Col>
-                                <Button onClick={this.verifyRequest.bind(this)} className='panel-form-label' variant='primary'>Verify</Button>
+                                <Button onClick={this.verifyRequest.bind(this)} id={styles['panel-action-btn']} variant='success'>Verify</Button>
                             </Col>
                         </Row>
                     </>
                     ) : (
                         <>
-                            <Row className='account-details-row-2'>
+                            <Row>
                                 <Col>
-                                    <div className='panel-form-label'>
+                                    <div id={styles['account-details-label']}>
                                         New Email
                                     </div>
                                     <EmailField ref={this.newEmailComponent} fieldName={''}/>
                                 </Col>
                                 <Col>
-                                    <div className='panel-form-label'>
+                                    <div id={styles['account-details-label']}>
                                         Confirm New Email
                                     </div>
                                     <EmailField ref={this.confirmNewEmailComponent} fieldName={''}/>
                                 </Col>
                             </Row>
-                            <Row className='account-details-row-2'>
+                            <Row className={styles['account-details-row-2']}>
                                 <Col>
-                                    <Button onClick={this.updateEmail.bind(this)} className='panel-form-label' variant='primary'>Change Email</Button>
+                                    <Button onClick={this.updateEmail.bind(this)} id={styles['panel-action-btn']}  variant='success'>Change Email</Button>
                                 </Col>
                             </Row>
                         </>

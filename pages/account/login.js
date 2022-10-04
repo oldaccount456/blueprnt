@@ -104,14 +104,15 @@ export default class Login extends React.Component{
             });
             return this.handleErrorPopUp(errorMessage);
         } 
-
     }
+
+    
 
     render(){
         return (
             <>
                 <Layout user={this.props.user}>
-                    <AccountPrompt headerText='Login' width={'500px'}>
+                    <AccountPrompt headerText='Login' width={'300px'}>
                         <Form onSubmit={this.login.bind(this)}>
                             <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage}/>
                             <InputField id='username'>
@@ -123,13 +124,13 @@ export default class Login extends React.Component{
                             <InputField id='hcaptcha'>
                                 <CaptchaField ref={this.captchaComponent}/>
                             </InputField>
-                            <SubmitButton action={this.login.bind(this)} actionText='Login'/>   
+                            <SubmitButton action={this.login.bind(this)} actionText='LOGIN'/>   
                         </Form>
-                        <div id={styles['register-field']} >
-                            <a href='/account/recover'>Register</a>
+                        <div id={styles['register-field']} className={styles['other-option-field']} >
+                            <div onClick={() => {window.location.href = '/account/register'}}>REGISTER</div>
                         </div>  
-                        <div id={styles['forgot-password-field']} >
-                            <a href='/account/recover'>Forgot Password</a>
+                        <div id={styles['forgot-password-field']} className={styles['other-option-field']} >
+                            <div onClick={() => {window.location.href = '/account/recover'}}>FORGOT PASSWORD</div>
                         </div>  
                         </AccountPrompt>
                 </Layout>

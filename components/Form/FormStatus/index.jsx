@@ -7,23 +7,44 @@ import styles from './FormStatus.module.css';
 
 export default function FormStatus(props){
     const showError = props.errorMessage.length !== 0 ? (
-        <Alert variant='danger' className='text-center'>
-            {props.errorMessage}
-        </Alert>
+        <AlertPrompt> 
+            <div id={styles['error-icon']}></div> 
+            <div className='container text-center d-flex justify-content-center'>
+                <div className={styles['prompt-message']}>{props.errorMessage}</div>
+            </div>
+        </AlertPrompt>
     ): null;
 
     const showSuccess = props.successMessage.length !== 0  ? (
-        <Alert variant='success' className='text-center'>
-            {props.successMessage}
-        </Alert>
+        <AlertPrompt> 
+             <div className='container text-center d-flex justify-content-center'>
+                <div className={styles['prompt-message']}>
+                    {props.successMessage}
+                </div>
+            </div>
+        </AlertPrompt>
     ): null;
 
     const popUpMessage = showSuccess ? showSuccess : showError;
     return (
-        <div className='container text-center d-flex justify-content-center'>
-            {props.processing ? <Alert variant='transparent' className='text-center'> <Loaders/></Alert> : popUpMessage}
-        </div>
+        props.processing ? (
+            <AlertPrompt>  
+                <div className='container text-center d-flex justify-content-center'>
+                    <Loaders/>
+                </div>
+            </AlertPrompt>
+        ) : popUpMessage
     );
+}
+
+const AlertPrompt = (props) => {
+    return (
+        <div id={styles['error-alert']}>   
+            <Alert id={styles['error-box']}>
+                {props.children}
+            </Alert>
+        </div>
+    )
 }
 
 const Loaders = () => {

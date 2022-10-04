@@ -7,6 +7,8 @@ import {
     Button
 } from 'react-bootstrap';
 
+import styles from '../Panel.module.css'; 
+
 export default class DeleteAccountPrompt extends React.Component{
     constructor(props){
         super(props);
@@ -59,15 +61,15 @@ export default class DeleteAccountPrompt extends React.Component{
     render(){
         return (
             <Modal show={this.state.showPrompt} onHide={this.closePrompt.bind(this)}>
-                <Modal.Header closeButton>
+                <Modal.Header className={styles['delete-account']} closeButton>
                     <Modal.Title>Account Deletion Confirmation</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you sure you want to delete your account?</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="danger" onClick={this.deleteAccount.bind(this)}>
+                <Modal.Body className={styles['delete-account']}>Are you sure you want to delete your account?</Modal.Body>
+                <Modal.Footer className={styles['delete-account']}>
+                    <Button id={styles['delete-account-btn']} variant="danger" onClick={this.deleteAccount.bind(this)}>
                         Yes
                     </Button>
-                    <Button variant="primary" onClick={this.closePrompt.bind(this)}>
+                    <Button  id={styles['delete-account-btn']} variant="primary" onClick={this.closePrompt.bind(this)}>
                         No
                     </Button>
                 </Modal.Footer>

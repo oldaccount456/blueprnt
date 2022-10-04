@@ -113,7 +113,7 @@ class SetPassword extends React.Component{
         return (
             <>
                 <Layout user={this.props.user}>
-                    <AccountPrompt headerText='Set a new password' width={'500px'}>
+                    <AccountPrompt headerText='Set a new password' width={'300px'}>
                         <Form onSubmit={this.resetPassword.bind(this)}>
                             <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage}/>
                             <InputField id='password'>
@@ -122,7 +122,7 @@ class SetPassword extends React.Component{
                             <InputField id='confirm-password'>
                                 <PasswordField ref={this.confirmPasswordComponent} fieldName={'Confirm Password'} />
                             </InputField>
-                            <SubmitButton action={this.resetPassword.bind(this, verificationId)} actionText='Change Password'/>  
+                            <SubmitButton action={this.resetPassword.bind(this, verificationId)} actionText='UPDATE PASSWORD'/>  
                         </Form>
                     </AccountPrompt>
                 </Layout>

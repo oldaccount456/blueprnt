@@ -1,0 +1,9 @@
+#submit-btn{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    letter-spacing: 1px!important;
+    color: white!important;
+    outline: none;
+    box-shadow: none;
+    width:300px;
+    background: transparent;
+}

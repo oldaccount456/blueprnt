@@ -131,7 +131,7 @@ export default class Register extends React.Component{
         return (
             <>
                 <Layout>
-                    <AccountPrompt headerText='Registration' width={'500px'}>
+                    <AccountPrompt headerText='Register' width={'300px'}>
                         <Form onSubmit={this.register.bind(this)}>
                             <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage}/>
 
@@ -150,7 +150,7 @@ export default class Register extends React.Component{
                             <InputField id='hcaptcha'>
                                 <CaptchaField ref={this.captchaComponent}/>
                             </InputField>
-                            <SubmitButton action={this.register.bind(this)} actionText='Register'/>   
+                            <SubmitButton action={this.register.bind(this)} actionText='REGISTER'/>   
                         </Form>
                     </AccountPrompt>
                 </Layout>

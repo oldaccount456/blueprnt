@@ -1,0 +1,13 @@
+.panel-nav-link{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    letter-spacing: 1px!important;
+    color: white!important;
+    outline: none;
+    box-shadow: none;
+    background: transparent!important;
+}
+
+.panel-sidebar-border{
+    border-right: 2px solid #e5e5e5;
+    height:355px;
+}

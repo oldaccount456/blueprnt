@@ -9,11 +9,12 @@ export default class GeneralInputField extends React.Component{
         }
     }
     highlight(){
-        this.formControlRef.current.style.borderColor = 'red';
+        this.formControlRef.current.style.setProperty("border-color", "red", "important");
     }
 
     unhighlight(){
-        this.formControlRef.current.style.borderColor = '';
+        this.formControlRef.current.style.setProperty("border-color", "", "important");
+
     }
     
     updateField(e){

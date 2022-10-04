@@ -88,10 +88,10 @@ class VerifyLogin extends React.Component{
         return (
             <>
                 <Layout user={this.props.user}>
-                    <AccountPrompt headerText='Verify Login Request' width={'500px'}>
+                    <AccountPrompt headerText='Verify Login Request' width={'300px'}>
                         <Form onSubmit={this.continue.bind(this)}>
                             <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage}/>
-                            <SubmitButton action={this.continue.bind(this)} actionText='Continue'/>   
+                            <SubmitButton action={this.continue.bind(this)} actionText='CONTINUE'/>   
                         </Form>
                     </AccountPrompt>
                 </Layout>
