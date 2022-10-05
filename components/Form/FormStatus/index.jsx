@@ -38,9 +38,11 @@ export default function FormStatus(props){
 const AlertPrompt = (props) => {
     return (
         <div id={styles['error-alert']}>   
-            <Alert id={styles['error-box']} >
-                {props.children}
-            </Alert>
+            <div className='container text-center d-flex justify-content-center'>
+                <Alert id={styles['error-box']} >
+                    {props.children}
+                </Alert>
+            </div>
         </div>
     )
 }
