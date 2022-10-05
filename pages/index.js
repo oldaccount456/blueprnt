@@ -168,7 +168,7 @@ export default class LandingPage extends React.Component{
                     <div id={styles['title-style']} className='container text-center d-flex justify-content-center'>
                         Upload Files
                     </div>
-                    <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage}/>
+                    <FormStatus processing={this.state.processing} errorMessage={this.state.errorMessage} successMessage={this.state.successMessage} errorIconHeight={'23px'}/>
                     <div id={styles['landing-area']} className='container text-center d-flex justify-content-center'>
                         <Dropzone
                             onChangeStatus={this.handleChangeStatus.bind(this)}

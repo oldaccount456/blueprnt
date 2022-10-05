@@ -8,7 +8,7 @@ import styles from './FormStatus.module.css';
 export default function FormStatus(props){
     const showError = props.errorMessage.length !== 0 ? (
         <AlertPrompt> 
-            <div id={styles['error-icon']}></div> 
+            <div id={styles['error-icon']} style={{height: props.errorIconHeight ? props.errorIconHeight : '21px'}}></div> 
             <div className='container text-center d-flex justify-content-center'>
                 <div className={styles['prompt-message']}>{props.errorMessage}</div>
             </div>

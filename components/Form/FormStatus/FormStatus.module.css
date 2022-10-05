@@ -10,11 +10,11 @@
 
 #error-icon{
     background-image: url(/exclamation.png)!important;
-    height: 21px;
+    
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    width: 23px;
+    width: 24px;
 }
 
 .prompt-message{
