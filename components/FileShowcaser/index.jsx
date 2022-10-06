@@ -11,6 +11,7 @@ export default class FileShowcaser extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            buffer: null,
             imageCode: props.encrypted ? null : true,
             status: 'Loading...'
         }
@@ -21,7 +22,13 @@ export default class FileShowcaser extends React.Component{
             responseType: 'arraybuffer'
         });
         const buffer = Buffer.from(response.data, 'binary');
-        const image = decrypt(buffer, this.props.encryptionPassword).toString('base64');
+        this.setState({
+            buffer: buffer
+        });
+    }
+
+    decrypt(password){
+        const image = decrypt(this.state.buffer, password).toString('base64');
         this.setState({
             imageCode: image
         });        

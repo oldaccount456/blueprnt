@@ -37,7 +37,7 @@ export async function getServerSideProps({ req, res, query }){
         };
     }
     const {bucketObjects, encrypted} = await getBucketKeys();
-    const buckeyKeys = bucketObjects.map((key) => ({
+    const storageItems = bucketObjects.map((key) => ({
         'bucketKey': key.bucket_key,
         'mimetype': key.mimetype,
         'encrypted': encrypted
@@ -45,7 +45,7 @@ export async function getServerSideProps({ req, res, query }){
     return {
         props: {
             user: token ? await verifyToken(token) : false,
-            bucketKeys: buckeyKeys,
+            storageItems: storageItems,
             encrypted: encrypted
         }
     }
@@ -59,12 +59,16 @@ class ImageViewer extends React.Component{
             encryptionPassword: '',
         }
         this.passwordPromptComponent = React.createRef();
-        for(let key of this.props.bucketKeys){
-            this[`${key}_ref`] = React.createRef()
+        for(let storageItem of this.props.storageItems){
+
+            this[`${storageItem.bucketKey}_ref`] = React.createRef()
         }
     }
 
-    componentDidMount(){
+    async componentDidMount(){
+        for(let storageItem of this.props.storageItems){
+            await this[`${storageItem.bucketKey}_ref`].current.downloadBuffer();
+        }
         if(this.props.encrypted){
             this.passwordPromptComponent.current.setState({
                 showPrompt: true
@@ -80,25 +84,22 @@ class ImageViewer extends React.Component{
 
     }
 
-    async updateEncryptionPassword(password){
-        this.setState({
-            encryptionPassword: password
-        });
-        for(let key of this.props.bucketKeys){
-            await this[`${key}_ref`].current.downloadBuffer()
+    updateEncryptionPassword(password){
+        for(let storageItem of this.props.storageItems){
+            this[`${storageItem.bucketKey}_ref`].current.decrypt(password);
         }
     }
 
     render(){
-        const images = this.props.bucketKeys.map((key) => {
+        const images = this.props.storageItems.map((storageItem) => {
             return (
                 <FileShowcaser 
-                    ref={this[`${key}_ref`]}
-                    url={`/api/view/${key.bucketKey}`} 
+                    ref={this[`${storageItem.bucketKey}_ref`]}
+                    url={`/api/view/${storageItem.bucketKey}`} 
                     reopenEncryptionModal={this.reopenEncryptionModal.bind(this)}
                     encryptionPassword={this.state.encryptionPassword} 
-                    encrypted={key.encrypted} 
-                    mimetype={key.mimetype}
+                    encrypted={storageItem.encrypted} 
+                    mimetype={storageItem.mimetype}
                 />
             );
         });
@@ -112,7 +113,7 @@ class ImageViewer extends React.Component{
                     <meta property="og:title" content="Untitled Album"/>
                     <meta property="og:type" content="website"/>
                     <meta property="og:url" content="/"/>
-                    <meta property="og:image" content={this.props.bucketKeys[0] ? `/api/view/${this.props.bucketKeys[0].bucketKey}` : `/logo.png`}/>
+                    <meta property="og:image" content={this.props.storageItems[0] ? `/api/view/${this.props.storageItems[0].bucketKey}` : `/logo.png`}/>
                     <meta name="twitter:card" content="summary_large_image"/>
                 </Head>
                 <PasswordPrompt 
@@ -121,7 +122,7 @@ class ImageViewer extends React.Component{
                     ref={this.passwordPromptComponent} 
                 />
                 <Layout user={this.props.user}>
-                    {this.props.bucketKeys.length === 0 ? (
+                    {this.props.storageItems.length === 0 ? (
                     <>
                         <div className='container text-center d-flex justify-content-center' id='image-404-text'>
                             <h2>No images here</h2>
