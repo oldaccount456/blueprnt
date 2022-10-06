@@ -58,7 +58,7 @@ export async function getServerSideProps({ req, res }){
                     'username': accountQuery.username,
                     'email': accountQuery.email,
                     'createdAt': accountQuery.created_at.toString(),
-                    'apiKey': account.api_key ? account.api_key : 'Not Activated'
+                    'apiKey': accountQuery.api_key ? accountQuery.api_key : 'Not Activated'
                 },
                 loginHistory: loginHistoryQuery.map((loginRecord) => ({
                     'ipAddress': loginRecord.ip_address,
