@@ -1,4 +1,4 @@
-# BluePrnt - https://blueprnt.net
+# BluePrnt 
 
 
 ## Information
