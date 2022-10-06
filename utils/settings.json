@@ -1,4 +1,5 @@
 {
     "allowedExts":[".jpg", ".jpeg", ".png", ".mp4", ".mp3", ".gif"],
-    "allowedMimetypes": ["image/jpeg", "image/png", "video/mp4", "audio/mpeg", "image/gif"]
+    "allowedMimetypes": ["image/jpeg", "image/png", "video/mp4", "audio/mpeg", "image/gif"],
+    "maxFileSize": 4000000
 }
