@@ -20,7 +20,7 @@ export default async function deleteAccount(req, res) {
             }
             catch(e){
                 return res.status(400).json({
-                    message: 'You sent an invalid type of request, please provide a valid authorization token',
+                    message: 'You sent an invalid type of request, your authorization token is not valid',
                     successful: false
                 });
             }
