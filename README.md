@@ -1,4 +1,4 @@
-# BluePrnt (WIP)
+# BluePrnt 
 
 
 ## Information
@@ -7,9 +7,10 @@
 
 - Technologies involve using: AWS S3 buckets for storage, AWS RDS for hosting a relational database and AWS SES for sending out emails for I.e. account recovery.
 
-- This project can be ran for free under Vercel and using Amazon's free tier for these services. They obviously come with limitations such as 5GB max storage on S3 buckets for example.  
+- This project can be ran for free under Vercel and using Amazon's free tier for these services. They obviously come with limitations such as 5GB max storage on S3 buckets for example. 
 
-- This project is still a WIP and is in its very early stages. There is a lot to add features wise as well as improve design wise and a lot of the current UI (such as the panel and loading animation) are just there as placeholders and aren't the final product. I'm only working on this project in my spare time. 
+- You can also find a production version of this code ran at: https://blueprnt.net.
+
 
 ## Features
 
@@ -23,9 +24,19 @@
 
 - Account system lets you generate an API key so you can configure ShareX or a screenshot client to upload images to your account specifically.
 
-## Plans
+- Client side encryption which lets you securely encrypt and decrypt your files. Since all the encryption & decryption functionality and passwords set are all done on the client-side/browser, this means that no one except *you* and whoever you share the password with can view the files. The password should only be known to you or the person intended to view the file.
 
-- Creating an option to completely encrypt & decrypt your uploads so that only you can access it via a password and so that an administrator cannot view your images through AWS at all (currently undergoing, reference to encryption methods can be found here: https://github.com/roandevs/crypto-express-fileupload).
+## Encryption-based upload in detail 
+
+- No file read-able data or encryption passwords are sent to the server and all encryption & decryption processes take place on the client/browser only.
+
+-  The encryption method utilizes NodeJS's crypto module and takes a buffer and a password and returns an encrypted version of the buffer, which is then sent as a file to the server. The server administrator receiving this (Vercel, AWS S3 or the site owner) would not be able to view or do anything with this buffer, as it was encrypted already before being sent to the server.
+
+- The decryption process will take the encrypted buffer of the file sent from the server and will take a password given by the user. It is technically impossible to view this file without the correct password. The password is then used in the decryption process, which then returns a buffer that is converted to a base64 string and then the string is used to attempt to render an image, audio or video on the page based on the file-type. If the file fails to load, then the decrypted buffer was not a valid file. It could only mean that the wrong password was given. Upon file loading failure, a function is auto-called to prompt the user to enter the correct password.
+
+- This means that anything you upload with the encryption feature enabled, cannot be viewed by any third party which includes the server Administrator running the project, Vercel, AWS etc.
+
+## Plans
 
 - Creating an option for one time view (snapchat like) type of image uploads.
 
