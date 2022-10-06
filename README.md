@@ -7,9 +7,9 @@
 
 - Technologies involve using: AWS S3 buckets for storage, AWS RDS for hosting a relational database and AWS SES for sending out emails for I.e. account recovery.
 
-- This project can be ran for free under Vercel and using Amazon's free tier for these services. They obviously come with limitations such as 5GB max storage on S3 buckets for example. 
+- This project can be ran for free under Vercel and using AWS' free tier for services such as RDS, S3 etc. They obviously come with limitations such as 5GB max storage on S3 buckets for example. 
 
-- You can also find a production version of this code ran at: https://blueprnt.net.
+- You can also test or use the production version of this code: https://blueprnt.net.
 
 
 ## Features
