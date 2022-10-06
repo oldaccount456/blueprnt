@@ -1,0 +1,17 @@
+.modal-style{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    border: 2px solid #0aa3cd!important;
+    color:white;
+    background: rgba(0, 0, 0, 1);
+}
+
+.modal-btn{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    letter-spacing: 1px!important;
+    color: white!important;
+    outline: none;
+    box-shadow: none;
+    width:100px;
+    background: transparent;
+    border-width:2.5px;
+}
