@@ -1,0 +1,23 @@
+#options{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    letter-spacing: 1px!important;
+    color: white!important;
+    margin-top:20px;
+    margin-right:700px;
+}
+
+#encryption-icon{
+    color: darkgoldenrod;
+}
+
+.icon{
+    font-size:2.33333em;
+}
+
+.clickable-option{
+    cursor: pointer;
+}
+
+.option-text{
+width:100px;
+}

@@ -1,3 +1,4 @@
+import PasswordPrompt from '@/components/Modals/PasswordPrompt';
 import FileShowcaser from '@/components/FileShowcaser';
 import Layout from '@/components/Layout';
 
@@ -27,17 +28,25 @@ export async function getServerSideProps({ req, res, query }){
                 endpoint_hash: query.imageId
             }
         })
-        return bucketKeys ? bucketKeys.bucket_objects : [];
+        return bucketKeys ? {
+            'bucketObjects': bucketKeys.bucket_objects, 
+            'encrypted': bucketKeys.encrypted
+        } : {
+            'bucketObjects': [],
+            'encrypted': false
+        };
     }
-    const keys = await getBucketKeys();
-    const buckeyKeys = keys.map((key) => ({
+    const {bucketObjects, encrypted} = await getBucketKeys();
+    const buckeyKeys = bucketObjects.map((key) => ({
         'bucketKey': key.bucket_key,
         'mimetype': key.mimetype,
-    }))
+        'encrypted': encrypted
+    }));
     return {
         props: {
             user: token ? await verifyToken(token) : false,
-            bucketKeys: buckeyKeys
+            bucketKeys: buckeyKeys,
+            encrypted: encrypted
         }
     }
 
@@ -46,13 +55,52 @@ export async function getServerSideProps({ req, res, query }){
 class ImageViewer extends React.Component{
     constructor(props){
         super(props);
+        this.state = {
+            encryptionPassword: '',
+        }
+        this.passwordPromptComponent = React.createRef();
+        for(let key of this.props.bucketKeys){
+            this[`${key}_ref`] = React.createRef()
+        }
+    }
+
+    componentDidMount(){
+        if(this.props.encrypted){
+            this.passwordPromptComponent.current.setState({
+                showPrompt: true
+            });
+        }
+    }
+
+    reopenEncryptionModal(){
+        this.passwordPromptComponent.current.handleErrorPopUp('Your decryption password was incorrect, please enter the right password to view the content.')
+        this.passwordPromptComponent.current.setState({
+            showPrompt: true
+        });
+
+    }
+
+    async updateEncryptionPassword(password){
+        this.setState({
+            encryptionPassword: password
+        });
+        for(let key of this.props.bucketKeys){
+            await this[`${key}_ref`].current.downloadBuffer()
+        }
     }
 
     render(){
         const images = this.props.bucketKeys.map((key) => {
             return (
-                <FileShowcaser url={`/api/view/${key.bucketKey}`} mimetype={key.mimetype}/>
-            )
+                <FileShowcaser 
+                    ref={this[`${key}_ref`]}
+                    url={`/api/view/${key.bucketKey}`} 
+                    reopenEncryptionModal={this.reopenEncryptionModal.bind(this)}
+                    encryptionPassword={this.state.encryptionPassword} 
+                    encrypted={key.encrypted} 
+                    mimetype={key.mimetype}
+                />
+            );
         });
 
         return (
@@ -67,6 +115,11 @@ class ImageViewer extends React.Component{
                     <meta property="og:image" content={this.props.bucketKeys[0] ? `/api/view/${this.props.bucketKeys[0].bucketKey}` : `/logo.png`}/>
                     <meta name="twitter:card" content="summary_large_image"/>
                 </Head>
+                <PasswordPrompt 
+                    header='Enter the decryption password' 
+                    updateEncryptionPassword={this.updateEncryptionPassword.bind(this)} 
+                    ref={this.passwordPromptComponent} 
+                />
                 <Layout user={this.props.user}>
                     {this.props.bucketKeys.length === 0 ? (
                     <>

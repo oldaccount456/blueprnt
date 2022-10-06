@@ -12,6 +12,9 @@
     "author": "roan",
     "license": "ISC",
     "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.2.0",
+        "@fortawesome/free-solid-svg-icons": "^6.2.0",
+        "@fortawesome/react-fontawesome": "^0.2.0",
         "@hcaptcha/react-hcaptcha": "^1.4.4",
         "aws-sdk": "^2.1209.0",
         "axios": "^0.27.2",

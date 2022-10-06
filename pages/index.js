@@ -1,8 +1,11 @@
 
 import FormStatus from '@/components/Form/FormStatus';
+import UploadOptions from '@/components/UploadOptions';
+import PasswordPrompt from '@/components/Modals/PasswordPrompt';
 import Layout from '@/components/Layout';
 
 import {checkToken} from '@/lib/authentication';
+import {encrypt} from '@/utils/crypto';
 import settings from '@/utils/settings.json';
 import styles from '@/styles/Home.module.css';
 
@@ -11,6 +14,7 @@ import Axios from 'axios';
 import Cookies from 'js-cookie';
 import Dropzone from 'react-dropzone-uploader';
 import path from 'path';
+
 
 export async function getServerSideProps({ req, res }){
     const authHeader = req.headers['cookie']
@@ -41,9 +45,35 @@ export default class LandingPage extends React.Component{
             errorMessage: '',
             uploadingFile: false,
             startedUpload: false,
+            enableEncryption: false,
+            encryptionPassword: '',
             filesBeingProcessed: [],
             fileObjs: [],
         };
+
+        this.passwordPromptComponent = React.createRef();
+    }
+
+    switchEncryptionState(){
+        if(!this.state.enableEncryption){
+            this.passwordPromptComponent.current.setState({
+                showPrompt: true
+            });
+        }
+        else{
+            this.setState({
+                encryptionPassword: '',
+                enableEncryption: false
+            });
+        }
+        
+    }
+
+    updateEncryptionPassword(password){
+        this.setState({
+            encryptionPassword: password,
+            enableEncryption: !this.state.enableEncryption
+        });
     }
 
     handleErrorPopUp(errorMessage){
@@ -62,41 +92,45 @@ export default class LandingPage extends React.Component{
             processing: false,
         });
     }
-
-
+    
     async handleSubmit(){
         this.setState({
             processing: true
-        })
+        });
         let uploadSize = 0;
-
         for(let file of this.state.fileObjs){
+            console.log(file.size)
             const fileExt = path.extname(file.name);
             const allowedExtensions = settings.allowedExts.map(ext => ext.toLowerCase());
             if(!allowedExtensions.includes(fileExt.toLowerCase())){
-                return this.handleErrorPopUp(`Image upload only supports the following image extensions: ${settings.allowedExts.join(', ')}`)
+                return this.handleErrorPopUp(`Image upload only supports the following image extensions: ${settings.allowedExts.join(', ')}`);
             }
             if(!settings.allowedMimetypes.includes(file.type)){
-                return this.handleErrorPopUp(`Image upload only supports the following mimetypes: ${settings.allowedMimetypes.join(', ')}`)
+                return this.handleErrorPopUp(`Image upload only supports the following mimetypes: ${settings.allowedMimetypes.join(', ')}`);
             }
             uploadSize += file.size;
         }
-        
-        if(Number(uploadSize) > 8000000){
+        if(Number(uploadSize) > settings.maxFileSize){
             uploadSize = 0;
-            return this.handleErrorPopUp('You have uploaded files more than 8mb in total, please make sure they are under 8mb in total')
+            return this.handleErrorPopUp('You have uploaded files more than 4mb in total, please make sure they are under 4mb in total');
         }
         const url = '/api/upload';
-        const uploadReqId = Math.random().toString(26).slice(2)
+        const uploadReqId = Math.random().toString(26).slice(2);
         const formData = new FormData();
-        formData.append('token', Cookies.get('token'))
-        formData.append('loggedIn', this.props.user)
-        formData.append('uploadReqId', uploadReqId)
-        
+        formData.append('token', Cookies.get('token'));
+        formData.append('uploadReqId', uploadReqId);
+        this.state.enableEncryption ? formData.append('encrypted', true) : formData.append('encrypted', false);
         for(let file of this.state.fileObjs){
-            formData.append('allFiles', file)
+            if(this.state.enableEncryption){
+                const buffer = await this.blobToBuffer(file);
+                const encryptedBuffer = encrypt(buffer, this.state.encryptionPassword);
+                const encryptedFile = new Blob([encryptedBuffer], { type: file.type });
+                formData.append('allFiles', encryptedFile);
+            }
+            else{
+                formData.append('allFiles', file);
+            }
         }
-
         const config = {
             headers: {
                 'content-type': 'multipart/form-data'
@@ -104,7 +138,7 @@ export default class LandingPage extends React.Component{
         }
         try{
             const uploadReq = await Axios.post(url, formData,config);
-            window.location.href = `/${uploadReq.data.endpointHash}`
+            window.location.href = uploadReq.data;
         }
         catch(err){
             console.log(err);
@@ -116,8 +150,28 @@ export default class LandingPage extends React.Component{
         }
     }
 
-    handleChangeStatus(data, status) { 
-        const { meta, file } = data
+    async blobToBuffer(blob){
+        return new Promise((resolve, reject) => {
+            if (typeof Blob === 'undefined' || !(blob instanceof Blob)) {
+                return reject('first argument must be a Blob')
+            }
+            const reader = new FileReader()
+            const onLoadEnd = (e) =>  {
+                reader.removeEventListener('loadend', onLoadEnd, false)
+                if (e.error) {
+                    return reject(e.error)
+                }
+                else {
+                    return resolve(Buffer.from(reader.result))
+                }
+            }
+            reader.addEventListener('loadend', onLoadEnd, false)
+            reader.readAsArrayBuffer(blob)
+        })
+    }
+
+    async handleChangeStatus(data, status) { 
+        const { meta, file } = data;
         if(!this.state.startedUpload){
             this.setState({
                 startedUpload: true
@@ -137,7 +191,6 @@ export default class LandingPage extends React.Component{
                 fileObjs: currentFileObjs
             });
         }
-       
         if(status === 'preparing'){
             let currentFiles = this.state.filesBeingProcessed;
             if(!currentFiles.includes(data.meta.id)){
@@ -147,7 +200,6 @@ export default class LandingPage extends React.Component{
                 filesBeingProcessed: currentFiles
             });
         }
-
         if(status === 'removed'){
             let currentFileObjs = this.state.fileObjs;
             currentFileObjs.pop();
@@ -164,6 +216,11 @@ export default class LandingPage extends React.Component{
     render(){
         return (
             <>
+                <PasswordPrompt 
+                    header='Set an encryption password' 
+                    updateEncryptionPassword={this.updateEncryptionPassword.bind(this)} 
+                    ref={this.passwordPromptComponent} 
+                />
                 <Layout user={this.props.user}>
                     <div id={styles['title-style']} className='container text-center d-flex justify-content-center'>
                         Upload Files
@@ -176,6 +233,9 @@ export default class LandingPage extends React.Component{
                             autoUpload={true}
                             inputContent={'Drop content here'}
                         />
+                    </div>
+                    <div className='container text-center d-flex justify-content-center'>
+                        <UploadOptions enableEncryption={this.state.enableEncryption} switchEncryptionState={this.switchEncryptionState.bind(this)}/>
                     </div>
                 </Layout>
             </>

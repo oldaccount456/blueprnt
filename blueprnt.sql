@@ -27,6 +27,7 @@ CREATE TABLE storage (
   account_id INT NOT NULL,
   name TEXT NOT NULL DEFAULT '',
   endpoint_hash VARCHAR(32) NOT NULL,
+  encrypted BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (id),
   CONSTRAINT storage_ibfk_1 FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -40,6 +41,7 @@ COMMENT ON COLUMN storage.id IS 'The storage record ID';
 COMMENT ON COLUMN storage.account_id IS 'The owners account ID';
 COMMENT ON COLUMN storage.name IS 'Name of file, displayed on the interface';
 COMMENT ON COLUMN storage.endpoint_hash IS 'Unique random hash used as a key to identify the users images, used in web endpoint';
+COMMENT ON COLUMN storage.encrypted IS 'Defines whether the files in this storage record are encrypted with a password or not';
 
 DROP TABLE IF EXISTS bucket_object;
 CREATE TABLE bucket_object (
