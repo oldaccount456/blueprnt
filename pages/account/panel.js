@@ -85,7 +85,7 @@ export default function Panel(props){
     return (
         <>
             <Layout user={props.user}>
-                <AccountPrompt headerText='Panel' width={'900px'} height={'385px'}>
+                <AccountPrompt headerText='Panel' width={'900px'} height={'485px'}>
                     <Tab.Container id="left-tabs-example" defaultActiveKey="first">
                         <Row id='account-panel-row'>
                             <Col sm={3} className={styles['panel-sidebar-border']}>
