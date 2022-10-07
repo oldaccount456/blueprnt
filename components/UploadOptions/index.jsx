@@ -12,14 +12,14 @@ export default function UploadOptions(props){
             <div onClick={() => {props.switchEncryptionState()}} className={styles['clickable-option']}>
                 {props.enableEncryption ? (
                     <>
-                        <FontAwesomeIcon id={styles['crypto-icon']} className={styles['icon']} icon={faUnlock}  size="lg" />
+                        <FontAwesomeIcon className={`${styles['crypto-icon']} ${styles['icon']}`} icon={faUnlock}  size="lg" />
                         <p className={styles['crypto-option-text']}>
                             Decrypt Upload
                         </p>
                     </>
                 ) : (
                     <>
-                        <FontAwesomeIcon id={styles['crypto-icon']} className={styles['icon']} icon={faLock}  size="lg" />
+                        <FontAwesomeIcon className={`${styles['crypto-icon']} ${styles['icon']}`} icon={faLock}  size="lg" />
                         <p className={styles['crypto-option-text']}>
                             Encrypt Upload
                         </p>
