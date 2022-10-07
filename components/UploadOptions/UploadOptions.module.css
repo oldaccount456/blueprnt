@@ -1,9 +1,10 @@
 #options{
+    display: inline-flex;
     font-family: 'ElectronicArtsDisplay Bold'!important;
     letter-spacing: 1px!important;
     color: white!important;
     margin-top:20px;
-    margin-right:700px;
+    margin-right:680px;
 }
 
 #encryption-icon{
@@ -18,6 +19,10 @@
     cursor: pointer;
 }
 
-.option-text{
-width:100px;
+#encryption-option-text{
+    width:100px;
+}
+
+#expiry-option-text{
+    width: 50px;
 }

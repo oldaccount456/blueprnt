@@ -49,6 +49,7 @@ export default class LandingPage extends React.Component{
             encryptionPassword: '',
             filesBeingProcessed: [],
             fileObjs: [],
+            expiry: 'No Expiry'
         };
 
         this.passwordPromptComponent = React.createRef();
@@ -76,6 +77,25 @@ export default class LandingPage extends React.Component{
         });
     }
 
+    changeExpiry(){
+        if(this.state.expiry === 'No Expiry'){
+            this.setState({
+                expiry: `1 time`,
+            });
+        }
+        else if(Number(this.state.expiry.split(' times')[0]) === 10){
+            this.setState({
+                expiry: 'No Expiry'
+            })
+        }
+        else{
+            const newAmount = Number(this.state.expiry[0])+1
+            this.setState({
+                expiry: `${newAmount} times`
+            })
+        }   
+    }
+
     handleErrorPopUp(errorMessage){
         return this.setState({
             errorMessage: errorMessage,
@@ -99,7 +119,6 @@ export default class LandingPage extends React.Component{
         });
         let uploadSize = 0;
         for(let file of this.state.fileObjs){
-            console.log(file.size)
             const fileExt = path.extname(file.name);
             const allowedExtensions = settings.allowedExts.map(ext => ext.toLowerCase());
             if(!allowedExtensions.includes(fileExt.toLowerCase())){
@@ -119,6 +138,7 @@ export default class LandingPage extends React.Component{
         const formData = new FormData();
         formData.append('token', Cookies.get('token'));
         formData.append('uploadReqId', uploadReqId);
+        formData.append('viewAmount', this.state.expiry === 'No Expiry' ? 0 : Number(this.state.expiry.split(' times')[0]) || Number(this.state.expiry.split(' time')[0]));
         this.state.enableEncryption ? formData.append('encrypted', true) : formData.append('encrypted', false);
         for(let file of this.state.fileObjs){
             if(this.state.enableEncryption){
@@ -235,7 +255,12 @@ export default class LandingPage extends React.Component{
                         />
                     </div>
                     <div className='container text-center d-flex justify-content-center'>
-                        <UploadOptions enableEncryption={this.state.enableEncryption} switchEncryptionState={this.switchEncryptionState.bind(this)}/>
+                        <UploadOptions 
+                            expiry={this.state.expiry}
+                            enableEncryption={this.state.enableEncryption} 
+                            switchEncryptionState={this.switchEncryptionState.bind(this)}
+                            changeExpiry={this.changeExpiry.bind(this)}
+                        />
                     </div>
                 </Layout>
             </>

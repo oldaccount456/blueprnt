@@ -60,6 +60,7 @@ const uploadOperation = multer({
         if(!validateStr(req.body.uploadReqId)){
             req.body.uploadReqId = getUniqueUploadId();
         }
+      
         if(!uploadData[req.body.uploadReqId]){
             const endpointHash = await getValidEndpoint();
             const verifiedId = await getUploaderId(req.body.token, req.body.apiKey);
@@ -67,7 +68,8 @@ const uploadOperation = multer({
                 id: null,
                 account_id: verifiedId,
                 endpoint_hash: endpointHash,
-                encrypted: req.body.encrypted === 'true'
+                encrypted: req.body.encrypted === 'true',
+                view_amount: isNaN(req.body.viewAmount) || (Number(req.body.viewAmount) <= 0 || Number(req.body.viewAmount) > 10) ? 0 : Number(req.body.viewAmount)
             });
             uploadData[req.body.uploadReqId] = {
                 'endpointHash': endpointHash,

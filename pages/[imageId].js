@@ -21,34 +21,60 @@ export async function getServerSideProps({ req, res, query }){
             return false;
         }
     } 
-    const getBucketKeys = async () => {
-        const bucketKeys = await storage.findOne({
+    const getStorageData = async () => {
+        const storageData = await storage.findOne({
             include: [bucketObject],
             where: {
                 endpoint_hash: query.imageId
             }
-        })
-        return bucketKeys ? {
-            'bucketObjects': bucketKeys.bucket_objects, 
-            'encrypted': bucketKeys.encrypted
+        });
+        return storageData ? {
+            'bucketObjects': storageData.bucket_objects, 
+            'encrypted': storageData.encrypted,
+            'viewAmount': storageData.view_amount,
+            'viewCount': storageData.view_count,
         } : {
             'bucketObjects': [],
-            'encrypted': false
+            'encrypted': false,
+            'viewAmount': 0,
+            'viewCount': 0,
         };
     }
-    const {bucketObjects, encrypted} = await getBucketKeys();
+    const {bucketObjects, encrypted, viewAmount, viewCount} = await getStorageData();
     const storageItems = bucketObjects.map((key) => ({
         'bucketKey': key.bucket_key,
         'mimetype': key.mimetype,
         'encrypted': encrypted
     }));
+    if(viewAmount !== 0){
+        const newCount = viewCount+1;
+        if(newCount > viewAmount){
+            await storage.destroy({
+                where: {
+                    endpoint_hash: query.imageId
+                }
+            }); 
+        }
+        else{
+            await storage.update({ view_count: newCount }, { where: { endpoint_hash: query.imageId }});
+        }
+        return {
+            props: {
+                user: token ? await verifyToken(token) : false,
+                storageItems: newCount > viewAmount ? [] : storageItems,
+                encrypted: encrypted
+            }
+        }
+    }
     return {
         props: {
             user: token ? await verifyToken(token) : false,
             storageItems: storageItems,
-            encrypted: encrypted
+            encrypted: encrypted,
+            viewAmount: viewAmount
         }
     }
+    
 
 };
 
@@ -113,7 +139,7 @@ class ImageViewer extends React.Component{
                     <meta property="og:title" content="Untitled Album"/>
                     <meta property="og:type" content="website"/>
                     <meta property="og:url" content="/"/>
-                    <meta property="og:image" content={this.props.storageItems[0] ? `/api/view/${this.props.storageItems[0].bucketKey}` : `/logo.png`}/>
+                    <meta property="og:image" content={this.props.storageItems[0] && this.props.viewAmount === 0 ? `/api/view/${this.props.storageItems[0].bucketKey}` : `/logo.png`}/>
                     <meta name="twitter:card" content="summary_large_image"/>
                 </Head>
                 <PasswordPrompt 
@@ -128,7 +154,7 @@ class ImageViewer extends React.Component{
                             <h2>No images here</h2>
                         </div>
                         <div className='container text-center d-flex justify-content-center' id='image-404-hint'>
-                            <h6>You may have visited the wrong link or this link has been removed from our systems.</h6>
+                            <h6>You may have visited the wrong link or this link expired and has been removed from our systems.</h6>
                         </div>
                     </>
                     ) : (

@@ -26,6 +26,8 @@
 
 - Client side encryption which lets you securely encrypt and decrypt your files. Since all the encryption & decryption functionality and passwords set are all done on the client-side/browser, this means that no one except *you* and whoever you share the password with can view the files. The password should only be known to you or the person intended to view the file.
 
+- Select a number of times an upload can viewed before being deleted
+
 ## Encryption-based upload in detail 
 
 - No file read-able data or encryption passwords are sent to the server and all encryption & decryption processes take place on the client/browser only.
@@ -37,8 +39,6 @@
 - This means that anything you upload with the encryption feature enabled, cannot be viewed by any third party which includes the server Administrator running the project, Vercel, AWS etc.
 
 ## Plans
-
-- Creating an option for one time view (snapchat like) type of image uploads.
 
 - Creating a custom screenshot client for Windows, MacOS and Linux with electron that auto uploads images and stores the link in your clipboard.
 
