@@ -7,7 +7,7 @@
     margin-right:680px;
 }
 
-#encryption-icon{
+.crypto-icon{
     color: darkgoldenrod;
 }
 
@@ -19,7 +19,7 @@
     cursor: pointer;
 }
 
-#encryption-option-text{
+.crypto-option-text{
     width:100px;
 }
 
