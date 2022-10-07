@@ -13,7 +13,7 @@ export default function UploadOptions(props){
                 {props.enableEncryption ? (
                     <>
                         <FontAwesomeIcon id={styles['encryption-icon']} className={styles['icon']} icon={faUnlock}  size="lg" />
-                        <p className={styles['option-text']}>
+                        <p className={styles['encryption-option-text']}>
                             Decrypt Upload
                         </p>
                     </>
