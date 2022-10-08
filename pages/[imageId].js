@@ -84,24 +84,26 @@ export async function getServerSideProps({ req, res, query }){
             user: token ? await verifyToken(token) : false,
             storageItems: storageItems,
             encrypted: encrypted,
-            viewAmount: viewAmount
+            viewAmount: viewAmount,
+            expiry: expiry,
+            note: note
         }
-    }
-    
-
+    }    
 };
 
 class ImageViewer extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            encryptionPassword: '',
+            note: props.note,
+            expired: false,
         }
         this.passwordPromptComponent = React.createRef();
+        this.noteComponent = React.createRef();
         for(let storageItem of this.props.storageItems){
-
             this[`${storageItem.bucketKey}_ref`] = React.createRef()
         }
+        
     }
 
     async componentDidMount(){
@@ -191,7 +193,7 @@ class ImageViewer extends React.Component{
                     <meta property="og:title" content="Untitled Album"/>
                     <meta property="og:type" content="website"/>
                     <meta property="og:url" content="/"/>
-                    <meta property="og:image" content={this.props.storageItems[0] && this.props.viewAmount === 0 ? `/api/view/${this.props.storageItems[0].bucketKey}` : `/logo.png`}/>
+                    <meta property="og:image" content={this.props.storageItems[0] && this.props.viewAmount === 0 && this.props.expiry === 0 ? `/api/view/${this.props.storageItems[0].bucketKey}` : `/logo.png`}/>
                     <meta name="twitter:card" content="summary_large_image"/>
                 </Head>
                 <PasswordPrompt 
@@ -199,7 +201,16 @@ class ImageViewer extends React.Component{
                     updateEncryptionPassword={this.updateEncryptionPassword.bind(this)} 
                     ref={this.passwordPromptComponent} 
                 />
+                <NotePrompt 
+                    header={this.props.encrypted ? 'View Encrypted Note': 'View Note'} 
+                    ref={this.noteComponent} 
+                    disabled={true}
+                />
                 <Layout user={this.props.user}>
+                <div className='container text-center d-flex justify-content-center'>
+                    <a href='#' onClick={this.viewNote.bind(this)}>View Note</a>
+                </div>
+                    
                     {this.props.storageItems.length === 0 ? (
                     <>
                         <div className='container text-center d-flex justify-content-center' id='image-404-text'>

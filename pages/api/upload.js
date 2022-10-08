@@ -60,7 +60,11 @@ const uploadOperation = multer({
         if(!validateStr(req.body.uploadReqId)){
             req.body.uploadReqId = getUniqueUploadId();
         }
-      
+        if(validateStr(req.body.note)){
+            if(req.body.note.length > 3000){
+                return callback(new Error('Your note must be below 3000 characters long'));
+            }
+        }
         if(!uploadData[req.body.uploadReqId]){
             const endpointHash = await getValidEndpoint();
             const verifiedId = await getUploaderId(req.body.token, req.body.apiKey);

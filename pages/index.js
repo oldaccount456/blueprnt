@@ -44,12 +44,22 @@ export default class LandingPage extends React.Component{
             startedUpload: false,
             enableEncryption: false,
             encryptionPassword: '',
+            addNote: false,
+            note: '',
             filesBeingProcessed: [],
             fileObjs: [],
-            expiry: 'No Expiry'
+            viewAmount: '∞ times',
+            expiry: Object.keys(settings.expiryTimes)[0], 
         };
 
         this.passwordPromptComponent = React.createRef();
+        this.notePromptComponent = React.createRef();
+    }
+
+    addNote(){
+        this.notePromptComponent.current.setState({
+            showPrompt: true
+        });
     }
 
     switchEncryptionState(){
@@ -64,7 +74,12 @@ export default class LandingPage extends React.Component{
                 enableEncryption: false
             });
         }
-        
+    }
+
+    updateNote(note){
+        this.setState({
+            note: note,
+        });
     }
 
     updateEncryptionPassword(password){
@@ -247,6 +262,13 @@ export default class LandingPage extends React.Component{
                     updateEncryptionPassword={this.updateEncryptionPassword.bind(this)} 
                     ref={this.passwordPromptComponent} 
                 />
+                <NotePrompt
+                    header={this.state.enableEncryption ? 'Set an encrypted note' : 'Set a note' }
+                    enableEncryption={this.state.enableEncryption}
+                    updateNote={this.updateNote.bind(this)} 
+                    ref={this.notePromptComponent} 
+                    disabled={false}
+                />
                 <Layout user={this.props.user}>
                     <div id={styles['title-style']} className='container text-center d-flex justify-content-center'>
                         Upload Files
@@ -263,9 +285,12 @@ export default class LandingPage extends React.Component{
                     <div className='container text-center d-flex justify-content-center'>
                         <UploadOptions 
                             expiry={this.state.expiry}
+                            viewAmount={this.state.viewAmount}
                             enableEncryption={this.state.enableEncryption} 
-                            switchEncryptionState={this.switchEncryptionState.bind(this)}
                             changeExpiry={this.changeExpiry.bind(this)}
+                            switchEncryptionState={this.switchEncryptionState.bind(this)}
+                            changeViewAmount={this.changeViewAmount.bind(this)}
+                            addNote={this.addNote.bind(this)}
                         />
                     </div>
                 </Layout>
