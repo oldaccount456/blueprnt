@@ -197,7 +197,7 @@ class ImageViewer extends React.Component{
                     <meta name="twitter:card" content="summary_large_image"/>
                 </Head>
                 <PasswordPrompt 
-                    header='Enter the decryption password' 
+                    header='Enter the encryption password' 
                     updateEncryptionPassword={this.updateEncryptionPassword.bind(this)} 
                     ref={this.passwordPromptComponent} 
                 />
