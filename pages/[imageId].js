@@ -207,9 +207,11 @@ class ImageViewer extends React.Component{
                     disabled={true}
                 />
                 <Layout user={this.props.user}>
-                <div className='container text-center d-flex justify-content-center'>
-                    <a href='#' onClick={this.viewNote.bind(this)}>View Note</a>
-                </div>
+                {this.state.note !== '' ? (
+                    <div className='container text-center d-flex justify-content-center'>
+                        <a href='#' onClick={this.viewNote.bind(this)}>View Note</a>
+                    </div>
+                ) : (null)}
                     
                     {this.props.storageItems.length === 0 ? (
                     <>
