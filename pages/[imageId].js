@@ -5,8 +5,8 @@ import Layout from '@/components/Layout';
 
 import {storage, bucketObject} from '@/lib/database';
 import {checkToken} from '@/lib/authentication';
-
 import {decryptString} from '@/utils/crypto';
+import styles from '@/styles/ImageView.module.css';
 import React from "react";
 import { withRouter } from 'next/router';
 import Head from 'next/head';
@@ -43,7 +43,7 @@ export async function getServerSideProps({ req, res, query }){
             'viewAmount': 0,
             'viewCount': 0,
             'expiry': 0,
-            'note': note
+            'note': ''
         };
     }
     const {
@@ -202,23 +202,23 @@ class ImageViewer extends React.Component{
                     ref={this.passwordPromptComponent} 
                 />
                 <NotePrompt 
-                    header={this.props.encrypted ? 'View Encrypted Note': 'View Note'} 
+                    header={this.props.encrypted ? 'Encrypted Note': 'View Note'} 
                     ref={this.noteComponent} 
                     disabled={true}
                 />
                 <Layout user={this.props.user}>
                 {this.state.note !== '' ? (
                     <div className='container text-center d-flex justify-content-center'>
-                        <a href='#' onClick={this.viewNote.bind(this)}>View Note</a>
+                        <a href='#' id={styles['view-note']} onClick={this.viewNote.bind(this)}>View Note</a>
                     </div>
                 ) : (null)}
                     
                     {this.props.storageItems.length === 0 ? (
                     <>
-                        <div className='container text-center d-flex justify-content-center' id='image-404-text'>
+                        <div className='container text-center d-flex justify-content-center' id={styles['image-404-text']}>
                             <h2>No images here</h2>
                         </div>
-                        <div className='container text-center d-flex justify-content-center' id='image-404-hint'>
+                        <div className='container text-center d-flex justify-content-center' id={styles['image-404-hint']}>
                             <h6>You may have visited the wrong link or this link expired and has been removed from our systems.</h6>
                         </div>
                     </>
