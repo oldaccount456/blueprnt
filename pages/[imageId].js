@@ -1,10 +1,12 @@
 import PasswordPrompt from '@/components/Modals/PasswordPrompt';
+import NotePrompt from '@/components/Modals/NotePrompt';
 import FileShowcaser from '@/components/FileShowcaser';
 import Layout from '@/components/Layout';
 
 import {storage, bucketObject} from '@/lib/database';
 import {checkToken} from '@/lib/authentication';
 
+import {decryptString} from '@/utils/crypto';
 import React from "react";
 import { withRouter } from 'next/router';
 import Head from 'next/head';
@@ -141,7 +143,15 @@ class ImageViewer extends React.Component{
         for(let storageItem of this.props.storageItems){
             this[`${storageItem.bucketKey}_ref`].current.decrypt(password);
         }
+        this.setState({
+            note: decryptString(this.state.note, password)
+        });
     }
+
+    viewNote(){
+        this.noteComponent.current.openPrompt();
+        this.noteComponent.current.setContent(this.state.note);
+    }    
 
     render(){
         const images = this.props.storageItems.map((storageItem) => {

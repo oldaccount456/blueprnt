@@ -1,20 +1,17 @@
-
 import FormStatus from '@/components/Form/FormStatus';
 import UploadOptions from '@/components/UploadOptions';
 import PasswordPrompt from '@/components/Modals/PasswordPrompt';
+import NotePrompt from '@/components/Modals/NotePrompt';
 import Layout from '@/components/Layout';
-
 import {checkToken} from '@/lib/authentication';
-import {encrypt} from '@/utils/crypto';
+import {encryptBuffer, encryptString} from '@/utils/crypto';
 import settings from '@/utils/settings.json';
 import styles from '@/styles/Home.module.css';
-
 import React from 'react';
 import Axios from 'axios';
 import Cookies from 'js-cookie';
 import Dropzone from 'react-dropzone-uploader';
 import path from 'path';
-
 
 export async function getServerSideProps({ req, res }){
     const authHeader = req.headers['cookie']
@@ -145,12 +142,14 @@ export default class LandingPage extends React.Component{
         const formData = new FormData();
         formData.append('token', Cookies.get('token'));
         formData.append('uploadReqId', uploadReqId);
-        formData.append('viewAmount', this.state.expiry === 'No Expiry' ? 0 : Number(this.state.expiry.split(' times')[0]) || Number(this.state.expiry.split(' time')[0]));
+        formData.append('viewAmount', this.state.viewAmount === '∞ times' ? 0 : Number(this.state.viewAmount.split(' times')[0]) || Number(this.state.viewAmount.split(' time')[0]));
+        formData.append('expiry', this.state.expiry);
+        formData.append('note', this.state.enableEncryption && this.state.note !== '' ? await encryptString(this.state.note, this.state.encryptionPassword) : this.state.note);
         this.state.enableEncryption ? formData.append('encrypted', true) : formData.append('encrypted', false);
         for(let file of this.state.fileObjs){
             if(this.state.enableEncryption){
                 const buffer = await this.blobToBuffer(file);
-                const encryptedBuffer = encrypt(buffer, this.state.encryptionPassword);
+                const encryptedBuffer = encryptBuffer(buffer, this.state.encryptionPassword);
                 const encryptedFile = new Blob([encryptedBuffer], { type: file.type });
                 formData.append('allFiles', encryptedFile);
             }

@@ -5,7 +5,7 @@ import styles from './FileShowcaser.module.css';
 import React from 'react';
 import Axios from 'axios';
 
-import {decrypt} from '@/utils/crypto';
+import {decryptBuffer} from '@/utils/crypto';
 
 export default class FileShowcaser extends React.Component{
     constructor(props){
@@ -28,7 +28,7 @@ export default class FileShowcaser extends React.Component{
     }
 
     decrypt(password){
-        const image = decrypt(this.state.buffer, password).toString('base64');
+        const image = decryptBuffer(this.state.buffer, password).toString('base64');
         this.setState({
             imageCode: image
         });        
