@@ -26,7 +26,11 @@
 
 - Client side encryption which lets you securely encrypt and decrypt your files. Since all the encryption & decryption functionality and passwords set are all done on the client-side/browser, this means that no one except *you* and whoever you share the password with can view the files. The password should only be known to you or the person intended to view the file.
 
-- Select a number of times an upload can viewed before being deleted
+- Select a number of times an upload can viewed before being auto-deleted
+
+- Select how long an upload can viewed in seconds/minutes before being auto-removed from the DOM
+
+- Leave a note attached to the upload (max 3000 characters). Notes are also encrypted & decrypted on the client-side/browser which means that no one except *you* and whoever you share the password with can view the note.
 
 ## Encryption-based upload in detail 
 
@@ -40,6 +44,6 @@
 
 ## Plans
 
-- Creating a custom screenshot client for Windows, MacOS and Linux with electron that auto uploads images and stores the link in your clipboard.
+- Create a desktop-based screenshot client for Windows, MacOS and Linux with electron that utilizes the web-based features such as timers and encryption whilst auto uploading images based on screenshot events and storing the generated link in your clipboard.
 
-- Creating a custom mobile app that auto uploads and generates a link from screenshot events.
+- Create a mobile app that auto uploads and generates a link from screenshot events.
