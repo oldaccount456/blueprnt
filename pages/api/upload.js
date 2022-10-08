@@ -61,7 +61,7 @@ const uploadOperation = multer({
             req.body.uploadReqId = getUniqueUploadId();
         }
         if(validateStr(req.body.note)){
-            if(req.body.note.length > 3000){
+            if(req.body.note.length > 6032){
                 return callback(new Error('Your note must be below 3000 characters long'));
             }
         }
