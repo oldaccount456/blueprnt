@@ -115,7 +115,9 @@ class ImageViewer extends React.Component{
                 showPrompt: true
             });
         }
-        this.startTimer();
+        else{
+            this.startTimer();
+        }
     }
 
     startTimer(){
