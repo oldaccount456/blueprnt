@@ -18,7 +18,7 @@ module.exports.decryptBuffer = (buffer, password) => {
     return result;
 }
 
-module.exports.encryptString = async (string, password) => {
+module.exports.encryptString = (string, password) => {
     const key = crypto.createHash('sha256').update(password).digest('base64').substr(0, 32);
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv(algorithm, key, iv);
