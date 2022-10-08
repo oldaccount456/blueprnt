@@ -4,7 +4,7 @@
     letter-spacing: 1px!important;
     color: white!important;
     margin-top:20px;
-    margin-right:680px;
+    margin-right:550px;
 }
 
 .crypto-icon{
@@ -23,6 +23,17 @@
     width:100px;
 }
 
-#expiry-option-text{
+#view-amount-option-text{
     width: 50px;
+}
+#expiry-amount-option-text, #note-option-text{
+    width: 60px;
+}
+
+#timer-div{
+    margin-right:15px;
+}
+
+#expiry-div{
+    margin-right:10px;
 }

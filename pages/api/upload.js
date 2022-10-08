@@ -69,7 +69,9 @@ const uploadOperation = multer({
                 account_id: verifiedId,
                 endpoint_hash: endpointHash,
                 encrypted: req.body.encrypted === 'true',
-                view_amount: isNaN(req.body.viewAmount) || (Number(req.body.viewAmount) <= 0 || Number(req.body.viewAmount) > 10) ? 0 : Number(req.body.viewAmount)
+                view_amount: isNaN(req.body.viewAmount) || (Number(req.body.viewAmount) <= 0 || Number(req.body.viewAmount) > 10) ? 0 : Number(req.body.viewAmount),
+                expiry: validateStr(req.body.expiry) ? settings.expiryTimes[req.body.expiry] : Object.keys(settings.expiryTimes)[0],
+                note: validateStr(req.body.note) ? req.body.note : ''
             });
             uploadData[req.body.uploadReqId] = {
                 'endpointHash': endpointHash,

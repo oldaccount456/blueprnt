@@ -77,23 +77,30 @@ export default class LandingPage extends React.Component{
         });
     }
 
-    changeExpiry(){
-        if(this.state.expiry === 'No Expiry'){
+    changeViewAmount(){
+        if(this.state.viewAmount === '∞ times'){
             this.setState({
-                expiry: `1 time`,
+                viewAmount: `1 time`,
             });
         }
-        else if(Number(this.state.expiry.split(' times')[0]) === 10){
+        else if(Number(this.state.viewAmount.split(' times')[0]) === 10){
             this.setState({
-                expiry: 'No Expiry'
+                viewAmount: '∞ times'
             })
         }
         else{
-            const newAmount = Number(this.state.expiry[0])+1
+            const newAmount = Number(this.state.viewAmount[0])+1
             this.setState({
-                expiry: `${newAmount} times`
+                viewAmount: `${newAmount} times`
             })
         }   
+    }
+
+    changeExpiry(){
+        const expiryTimes = Object.keys(settings.expiryTimes);
+        this.setState({
+            expiry: expiryTimes.indexOf(this.state.expiry) === expiryTimes.length-1 ? expiryTimes[0] : expiryTimes[expiryTimes.indexOf(this.state.expiry)+1]
+        });
     }
 
     handleErrorPopUp(errorMessage){

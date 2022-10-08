@@ -33,14 +33,25 @@ export async function getServerSideProps({ req, res, query }){
             'encrypted': storageData.encrypted,
             'viewAmount': storageData.view_amount,
             'viewCount': storageData.view_count,
+            'expiry': storageData.expiry,
+            'note': storageData.note,
         } : {
             'bucketObjects': [],
             'encrypted': false,
             'viewAmount': 0,
             'viewCount': 0,
+            'expiry': 0,
+            'note': note
         };
     }
-    const {bucketObjects, encrypted, viewAmount, viewCount} = await getStorageData();
+    const {
+        bucketObjects, 
+        encrypted, 
+        viewAmount, 
+        viewCount,
+        expiry,
+        note
+    } = await getStorageData();
     const storageItems = bucketObjects.map((key) => ({
         'bucketKey': key.bucket_key,
         'mimetype': key.mimetype,
@@ -100,12 +111,28 @@ class ImageViewer extends React.Component{
                 showPrompt: true
             });
         }
+        this.startTimer();
+    }
+
+    startTimer(){
+        if(this.props.expiry !== 0){
+            setTimeout(this.selfDestruct.bind(this), this.props.expiry*1000);
+        }
+    }
+
+    selfDestruct(){
+        this.setState({
+            expired: true
+        })
     }
 
     reopenEncryptionModal(){
+        this.setState({
+            note: this.props.note
+        });
         this.passwordPromptComponent.current.handleErrorPopUp('Your decryption password was incorrect, please enter the right password to view the content.')
         this.passwordPromptComponent.current.setState({
-            showPrompt: true
+            showPrompt: true,
         });
 
     }
@@ -123,12 +150,27 @@ class ImageViewer extends React.Component{
                     ref={this[`${storageItem.bucketKey}_ref`]}
                     url={`/api/view/${storageItem.bucketKey}`} 
                     reopenEncryptionModal={this.reopenEncryptionModal.bind(this)}
-                    encryptionPassword={this.state.encryptionPassword} 
                     encrypted={storageItem.encrypted} 
                     mimetype={storageItem.mimetype}
                 />
             );
         });
+        if(this.state.expired){
+            return (
+                <>
+                    <Layout user={this.props.user}>
+                        <div className='container text-center d-flex justify-content-center' id='image-404-text'>
+                            <h2>This image was set on a timer</h2>
+                        </div>
+                        <div className='container text-center d-flex justify-content-center' id='image-404-hint'>
+                            <h6>Gone. Yep, it is gone.</h6>
+                        </div>
+                    </Layout>
+                </>
+            )
+        }
+
+        
 
         return (
             <>

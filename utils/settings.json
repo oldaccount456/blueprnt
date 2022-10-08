@@ -1,5 +1,13 @@
 {
     "allowedExts":[".jpg", ".jpeg", ".png", ".mp4", ".mp3", ".gif"],
     "allowedMimetypes": ["image/jpeg", "image/png", "video/mp4", "audio/mpeg", "image/gif"],
-    "maxFileSize": 4000000
+    "maxFileSize": 4000000,
+    "expiryTimes":  {
+        "No Expiry": 0,
+        "5 seconds": 5,
+        "10 seconds": 10,
+        "20 seconds": 20,
+        "30 seconds": 30,
+        "1 minute": 60
+    }
 }
