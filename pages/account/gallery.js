@@ -41,14 +41,15 @@ export async function getServerSideProps({ req, res }){
                 'bucketKey': storage.bucket_objects.length > 0 ? storage.bucket_objects[0].bucket_key : null, 
                 'mimetype': storage.bucket_objects.length > 0 ? storage.bucket_objects[0].mimetype : null,
             },
-            'endpointHash': storage.endpoint_hash
+            'endpointHash': storage.endpoint_hash,
+            'encrypted': storage.encrypted,
            
         }));
 
         return {
             props: {
                 user: username,
-                galleryItems: galleryItems,
+                galleryItems: galleryItems.reverse(),
             }
         }
     }
