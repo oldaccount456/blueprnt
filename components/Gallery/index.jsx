@@ -5,6 +5,12 @@ import {
 import FileShowcaser from '@/components/FileShowcaser';
 import getPaginatedResult from '@/utils/paginateResult';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+    faLock, 
+} from '@fortawesome/free-solid-svg-icons';
+import styles from './Gallery.module.css';
+
 export default function Gallery(props){
     const paginatedResults = getPaginatedResult(props.galleryItems, 3);
     let formattedSearchedItems = [];
@@ -14,7 +20,14 @@ export default function Gallery(props){
             <tr>
                 {rowOfItems.map((file) => (
                     <td>
-                        <FileShowcaser url={`/api/view/${file.preview.bucketKey}`} mimetype={file.preview.mimetype}/>
+                       {file.encrypted ? (
+                         <div className='container text-center d-flex justify-content-center'>
+                            <FontAwesomeIcon className={`${styles['crypto-icon']} ${styles['icon']}`} icon={faLock}  size="lg" />
+                         </div>
+                            
+                       ) : (
+                            <FileShowcaser url={`/api/view/${file.preview.bucketKey}`} mimetype={file.preview.mimetype}/>
+                       )}
                         <div className='container text-center d-flex justify-content-center'>
                             <a href={`/${file.endpointHash}`}>View</a>
                         </div>
