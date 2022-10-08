@@ -147,9 +147,11 @@ class ImageViewer extends React.Component{
         for(let storageItem of this.props.storageItems){
             this[`${storageItem.bucketKey}_ref`].current.decrypt(password);
         }
-        this.setState({
-            note: decryptString(this.state.note, password)
-        });
+        if(this.props.note !== ''){
+            this.setState({
+                note: decryptString(this.state.note, password)
+            });
+        }
     }
 
     viewNote(){
