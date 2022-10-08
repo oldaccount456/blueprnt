@@ -4,6 +4,8 @@ import Gallery from '@/components/Gallery';
 import {checkToken} from '@/lib/authentication';
 import {storage, account, bucketObject} from '@/lib/database';
 
+import styles from '@/styles/Gallery.module.css';
+
 export async function getServerSideProps({ req, res }){
     const authHeader = req.headers['cookie']
     const token = authHeader && authHeader.split('token=')[1];
@@ -71,10 +73,10 @@ export default function GalleryPage(props){
             <Layout user={props.user}>
                 {props.galleryItems.length === 0 ? (
                      <>
-                     <div className='container text-center d-flex justify-content-center' id='image-404-text'>
+                     <div className='container text-center d-flex justify-content-center' id={styles['image-404-text']}>
                          <h2>You currently have no images in your gallery</h2>
                      </div>
-                     <div className='container text-center d-flex justify-content-center' id='image-404-hint'>
+                     <div className='container text-center d-flex justify-content-center' id={styles['image-404-text']}>
                          <h6>Head <a href='/'>here</a> to start uploading</h6>
                      </div>
                  </>

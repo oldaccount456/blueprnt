@@ -1,0 +1,12 @@
+#image-404-text, #image-404-hint{
+    font-family: 'ElectronicArtsDisplay Bold'!important;
+    color:white;
+}
+
+#image-404-text{
+    margin-top:200px;
+}
+
+#image-404-hint{
+    margin-top:20px;
+}
