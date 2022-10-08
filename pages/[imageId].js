@@ -175,10 +175,10 @@ class ImageViewer extends React.Component{
             return (
                 <>
                     <Layout user={this.props.user}>
-                        <div className='container text-center d-flex justify-content-center' id='image-404-text'>
+                        <div className='container text-center d-flex justify-content-center' id={styles['image-404-text']}>
                             <h2>This image was set on a timer</h2>
                         </div>
-                        <div className='container text-center d-flex justify-content-center' id='image-404-hint'>
+                        <div className='container text-center d-flex justify-content-center' id={styles['image-404-hint']}>
                             <h6>Gone. Yep, it is gone.</h6>
                         </div>
                     </Layout>
