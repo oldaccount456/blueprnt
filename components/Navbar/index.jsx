@@ -16,16 +16,16 @@ export default function NavbarComponent(props){
         router.pathname == "/" ? document.getElementsByClassName('dzu-input')[0].click() : window.location.href = '/';    
     }
     return (
-        <Navbar id={styles['navbar']} bg="light" expand="lg">
+        <Navbar id={styles['navbar']} bg="light" expand="lg" variant="dark">
             <Container fluid>
                 <Navbar.Brand id={styles['navbar-brand']} href="/">
                     <Image src='/logo.png' alt='Logo' width={694/4} height={134/4} quality={100} />
                     <div id={styles['logo-footer']}>Upload images today!</div>
                 </Navbar.Brand>
-                <Navbar.Toggle aria-controls="navbarScroll"/>
+                <Navbar.Toggle id={styles['navbar-toggler']} aria-controls="navbarScroll"/>
                     <div className="d-flex " id={styles['nav-options']}>
                         <Navbar.Collapse id="basic-navbar-nav">
-                            <Nav className="ml-auto" style={{ maxHeight: '100px' }} navbarScroll>
+                            <Nav className="ml-auto" navbarScroll>
                                 {props.user ? (
                                     <>
                                         <Nav.Link className={styles['nav-link']} href="/">

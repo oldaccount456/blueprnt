@@ -18,6 +18,7 @@ import {
 } from 'react-bootstrap';
 
 import styles from '@/styles/Panel.module.css';
+import React from 'react';
 
 export async function getServerSideProps({ req, res }){
     const authHeader = req.headers['cookie']
@@ -81,49 +82,78 @@ export async function getServerSideProps({ req, res }){
 };
 
 
-export default function Panel(props){
-    return (
-        <>
-            <Layout user={props.user}>
-                <AccountPrompt headerText='Panel' width={'900px'} height={'485px'}>
-                    <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-                        <Row id='account-panel-row'>
-                            <Col sm={3} className={styles['panel-sidebar-border']}>
-                                <Nav variant="pills" className="flex-column">
-                                    <Nav.Item >
-                                        <Nav.Link className={styles['panel-nav-link']} eventKey="first">Account Details</Nav.Link>
-                                    </Nav.Item>
-                                    <Nav.Item className={styles['panel-nav-item']}>
-                                        <Nav.Link className={styles['panel-nav-link']} eventKey="second">Change Password</Nav.Link>
-                                    </Nav.Item>
-                                    <Nav.Item className={styles['panel-nav-item']}>
-                                        <Nav.Link  className={styles['panel-nav-link']} eventKey="third">Change Email</Nav.Link>
-                                    </Nav.Item>
-                                    <Nav.Item className={styles['panel-nav-item']}>
-                                        <Nav.Link className={styles['panel-nav-link']} eventKey="fourth">Login History</Nav.Link>
-                                    </Nav.Item>
-                                </Nav>
-                            </Col>
-                            <Col sm={9}>
-                            <Tab.Content>
-                                <Tab.Pane eventKey="first">
-                                    <AccountDetails accountDetails={props.accountDetails} lastLoginDate={props.lastLoginDate} lastLoginIP={props.lastLoginIP}/>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="second">
-                                    <PasswordManagement/>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="third">
-                                    <EmailManagement/>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="fourth">
-                                    <LoginActivity loginHistory={props.loginHistory}/>
-                                </Tab.Pane>
-                            </Tab.Content>
-                            </Col>
-                        </Row>
-                    </Tab.Container>
-                </AccountPrompt>
-            </Layout>
-        </>
-    )
+export default class Panel extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.state = {
+            panelWidth: '485px'
+        }
+    }
+
+    checkHeight(){
+        if(Number(window.innerWidth) <= 575){
+            this.setState({
+                panelHeight: '100%'
+            });
+        }
+        else{
+            this.setState({
+                panelHeight: '485px'
+            })
+        }
+    }
+
+    componentDidMount(){
+        window.addEventListener('resize', this.checkHeight.bind(this));
+    }
+
+    render(){
+        return (
+            <>
+                <Layout user={this.props.user}>
+                    <AccountPrompt headerText='Panel' width={'900px'} height={this.panelHeight}>
+                        <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+                            <Row id='account-panel-row'>
+                                <Col sm={3} className={styles['panel-sidebar-border']}>
+                                    <Nav variant="pills" className="flex-column">
+                                        <Nav.Item >
+                                            <Nav.Link className={styles['panel-nav-link']} eventKey="first">Account Details</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item className={styles['panel-nav-item']}>
+                                            <Nav.Link className={styles['panel-nav-link']} eventKey="second">Change Password</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item className={styles['panel-nav-item']}>
+                                            <Nav.Link  className={styles['panel-nav-link']} eventKey="third">Change Email</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item className={styles['panel-nav-item']}>
+                                            <Nav.Link className={styles['panel-nav-link']} eventKey="fourth">Login History</Nav.Link>
+                                        </Nav.Item>
+                                    </Nav>
+                                </Col>
+                                <Col sm={9}>
+                                <Tab.Content>
+                                    <Tab.Pane eventKey="first">
+                                        <AccountDetails accountDetails={this.props.accountDetails} lastLoginDate={this.props.lastLoginDate} lastLoginIP={this.props.lastLoginIP}/>
+                                    </Tab.Pane>
+                                    <Tab.Pane eventKey="second">
+                                        <PasswordManagement/>
+                                    </Tab.Pane>
+                                    <Tab.Pane eventKey="third">
+                                        <EmailManagement/>
+                                    </Tab.Pane>
+                                    <Tab.Pane eventKey="fourth">
+                                        <LoginActivity loginHistory={this.props.loginHistory}/>
+                                    </Tab.Pane>
+                                </Tab.Content>
+                                </Col>
+                            </Row>
+                        </Tab.Container>
+                    </AccountPrompt>
+                </Layout>
+            </>
+        )
+    }
 }
+
+

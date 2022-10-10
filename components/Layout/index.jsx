@@ -1,5 +1,5 @@
 import Navbar from '@/components/Navbar';
-
+import styles from './Layout.module.css';
 export default function Layout(props) {
     return (
         <>
@@ -14,7 +14,7 @@ export default function Layout(props) {
                 }
             `}</style>    
             <Navbar user={props.user}/>
-            <main>{props.children}</main>
+            <main id={styles['main-section']}>{props.children}</main>
         </>
     )
 }

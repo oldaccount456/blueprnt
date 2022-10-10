@@ -5,9 +5,11 @@
     color:white;
 }
 
+#api-key-field{
+    white-space: nowrap;
+}
 
-
-#account-details-label, 
+.account-details-label, 
 .table-header, 
 .table-field,
 .page-btn

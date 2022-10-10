@@ -37,3 +37,26 @@
 #expiry-div{
     margin-right:10px;
 }
+
+@media only screen and (max-width: 991px) {
+    #options{
+        margin-right:450px;
+    }
+}
+@media only screen and (max-width: 767px) {
+    #options{
+        margin-right:280px;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    #options{
+        margin-right:240px;
+    }
+}
+@media only screen and (max-width: 511px) {
+    #options{
+        margin-right:0%;
+    }
+
+}

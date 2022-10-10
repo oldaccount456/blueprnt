@@ -1,60 +1,5 @@
-@font-face {     
-    font-family: 'ElectronicArtsDisplay';     
-    src: url('/fonts/ElectronicArtsDisplay-Regular.woff2') format('woff');     
-    font-weight: 400;     
-    font-style: normal;   
-  }     
-
-  @font-face {     
-    font-family: 'ElectronicArtsDisplay Bold';     
-    src: url('/fonts/ElectronicArtsDisplay-Bold.woff2') format('woff');     
-    font-weight: 600;     
-    font-style: normal;   
-  }   
-  @font-face {     
-    font-family: 'ElectronicArtsText';     
-    src: url('/fonts/ElectronicArtsText-Light.woff2') format('woff');     
-    font-weight: 300;     
-    font-style: normal;   
-  }   
-  @font-face {     
-    font-family: 'ElectronicArtsText';     
-    src: url('/fonts/ElectronicArtsText-LightItalic.woff2') format('woff');     
-    font-weight: 300;     
-    font-style: italic;   
-  }   
-  
-  @font-face {     
-    font-family: 'ElectronicArtsText';     
-    src: url('/fonts/ElectronicArtsText-Regular.woff2') format('woff');     
-    font-weight: 400;     
-    font-style: normal;   
-  }   
-  
-  @font-face {     
-    font-family: 'ElectronicArtsText';     
-    src: url('/fonts/ElectronicArtsText-Italic.woff2') format('woff');     
-    font-weight: 400;     
-    font-style: italic;   
-  }   
-  @font-face {     
-    font-family: 'ElectronicArtsText';     
-    src: url('/fonts/ElectronicArtsText-Bold.woff2') format('woff');     
-    font-weight: 600;     
-    font-style: normal;   
-  }   
-  @font-face {     
-    font-family: 'ElectronicArtsText';     
-    src: url('/fonts/ElectronicArtsText-BoldItalic.woff2') format('woff');     
-    font-weight: 600;     
-    font-style: italic;   
-  } 
 #navbar{
-
-
-  background-color:rgba(0, 0, 0, 0.2)!important;
-
-
+    background-color:rgba(0, 0, 0, 0.2)!important;
 }
 
 #profile{
@@ -63,12 +8,11 @@
    margin-left:10px;
 }
 #nav-dropdown{
-  color:white;
+    color:white;
     margin-top:2px;
     font-weight: normal;
     font-family: 'ElectronicArtsDisplay Bold';
     letter-spacing:1px;
-
 }
 
 #avatar-circle {
@@ -155,4 +99,19 @@
 
 .nav-text{
     margin-top:9px;
+}
+
+@media only screen and (max-width: 991px) {
+    #navbar-toggler{
+        margin-left:calc(100% - 300px);
+    }
+    #nav-dropdown{
+        margin-left: 10px;
+    }
+}
+
+@media only screen and (max-width: 511px) {
+    #navbar{
+        width: 511px;
+    }
 }

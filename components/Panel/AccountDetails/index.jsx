@@ -119,7 +119,7 @@ export default class AccountDetails extends React.Component{
                 <Container>
                     <Row>
                         <Col>
-                            <div id={styles['account-details-label']}>
+                            <div className={styles['account-details-label']}>
                                 Username
                             </div>
                             <Form.Control
@@ -131,7 +131,7 @@ export default class AccountDetails extends React.Component{
                             />
                         </Col>
                         <Col>
-                            <div id={styles['account-details-label']}>
+                            <div className={styles['account-details-label']}>
                                 Email
                             </div>
                             <Form.Control
@@ -146,7 +146,7 @@ export default class AccountDetails extends React.Component{
                     </Row>
                     <Row className={styles['account-details-row-2']}>
                         <Col>
-                            <div id={styles['account-details-label']}>
+                            <div className={styles['account-details-label']}>
                                 Creation Date
                             </div>
                             <Form.Control
@@ -158,7 +158,7 @@ export default class AccountDetails extends React.Component{
                             />
                         </Col>
                         <Col>
-                            <div id={styles['account-details-label']}>
+                            <div className={styles['account-details-label']} id={styles['api-key-field']}>
                                 API Key - {this.state.apiKey === 'Not Activated' ? (
                                      <a onClick={this.activateApiKey.bind(this)} href='#'>Activate Key</a>
                                 ) :  (
@@ -176,7 +176,7 @@ export default class AccountDetails extends React.Component{
                     </Row>
                     <Row className={styles['account-details-row-2']}>
                         <Col>
-                            <div id={styles['account-details-label']}>
+                            <div className={styles['account-details-label']}>
                                 Last Login IP
                             </div>
                             <Form.Control
@@ -188,7 +188,7 @@ export default class AccountDetails extends React.Component{
                             />
                         </Col>
                         <Col>
-                            <div id={styles['account-details-label']}>
+                            <div className={styles['account-details-label']}>
                                 Last Login Date
                             </div>
                             <Form.Control

@@ -19,3 +19,10 @@
     width: 800px;
     display:inline-block;
 }
+
+
+@media only screen and (max-width: 575px) {
+    #landing-area{
+        width:512px;
+    }
+}
