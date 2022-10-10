@@ -54,6 +54,7 @@ export async function getServerSideProps({ req, res, query }){
         expiry,
         note
     } = await getStorageData();
+    
     const storageItems = bucketObjects.map((key) => ({
         'bucketKey': key.bucket_key,
         'mimetype': key.mimetype,
@@ -75,7 +76,10 @@ export async function getServerSideProps({ req, res, query }){
             props: {
                 user: token ? await verifyToken(token) : false,
                 storageItems: newCount > viewAmount ? [] : storageItems,
-                encrypted: encrypted
+                encrypted: encrypted,
+                viewAmount: viewAmount,
+                expiry: expiry,
+                note: note
             }
         }
     }
@@ -185,9 +189,6 @@ class ImageViewer extends React.Component{
                 </>
             )
         }
-
-        
-
         return (
             <>
                 <Head>
