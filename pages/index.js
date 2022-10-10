@@ -8,6 +8,7 @@ import {encryptBuffer, encryptString} from '@/utils/crypto';
 import settings from '@/utils/settings.json';
 import styles from '@/styles/Home.module.css';
 import React from 'react';
+import Head from 'next/head';
 import Axios from 'axios';
 import Cookies from 'js-cookie';
 import Dropzone from 'react-dropzone-uploader';
@@ -257,6 +258,17 @@ export default class LandingPage extends React.Component{
     render(){
         return (
             <>
+                <Head>
+                    <meta name="description" content="BluePrnt is a free, clean, easy to use image host" />
+                    <meta name="keywords" content={`blueprnt, GIF capture, imagehost, screen capture, screenshot app, visual bookmark tool, screen GIF`} />
+                    <title>BluePrnt</title>
+                    <meta property="og:title" content="BluePrnt"/>
+                    <meta property="og:description" content="BluePrnt is a free, clean, easy to use image host"/>
+                    <meta property="og:type" content="website"/>
+                    <meta property="og:url" content="/"/>
+                    <meta property="og:image" content='/logo.png'/>
+                    <meta name="twitter:card" content="summary_large_image"/>
+                </Head>
                 <PasswordPrompt 
                     header='Set an encryption password' 
                     updateEncryptionPassword={this.updateEncryptionPassword.bind(this)} 
